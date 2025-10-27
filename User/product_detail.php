@@ -45,6 +45,61 @@ $product = mysqli_fetch_assoc($run);
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
+
+    <style>
+        /* Color Variants for Detail Page */
+        .detail-color-variants {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .detail-color-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            position: relative;
+        }
+
+        .detail-color-circle:hover {
+            transform: scale(1.15);
+            border-color: #666;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .detail-color-circle.active {
+            border-color: #333;
+            border-width: 3px;
+            box-shadow: 0 0 0 2px #fff, 0 0 0 4px #333;
+        }
+
+        .detail-color-circle.active::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 14px;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 576px) {
+            .detail-color-circle {
+                width: 28px;
+                height: 28px;
+            }
+
+            .detail-color-circle.active::after {
+                font-size: 12px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -53,66 +108,11 @@ $product = mysqli_fetch_assoc($run);
     <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
         <div class="spinner-grow text-primary" role="status"></div>
     </div>
-    <!-- Spinner End -->
 
+    <?php
 
-    <!-- Navbar start -->
-    <div class="container-fluid fixed-top">
-        <div class="container topbar bg-primary d-none d-lg-block">
-            <div class="d-flex justify-content-between">
-                <div class="top-info ps-2">
-                    <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#" class="text-white">123 Street, New York</a></small>
-                    <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">Email@Example.com</a></small>
-                </div>
-                <div class="top-link pe-2">
-                    <a href="#" class="text-white"><small class="text-white mx-2">Privacy Policy</small>/</a>
-                    <a href="#" class="text-white"><small class="text-white mx-2">Terms of Use</small>/</a>
-                    <a href="#" class="text-white"><small class="text-white ms-2">Sales and Refunds</small></a>
-                </div>
-            </div>
-        </div>
-        <div class="container px-0">
-            <nav class="navbar navbar-light bg-white navbar-expand-xl">
-                <a href="index.html" class="navbar-brand">
-                    <h1 class="text-primary display-6">Fruitables</h1>
-                </a>
-                <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                    <span class="fa fa-bars text-primary"></span>
-                </button>
-                <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
-                    <div class="navbar-nav mx-auto">
-                        <a href="index.html" class="nav-item nav-link">Home</a>
-                        <a href="shop.html" class="nav-item nav-link">Shop</a>
-                        <a href="shop-detail.html" class="nav-item nav-link active">Shop Detail</a>
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                            <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                                <a href="cart.html" class="dropdown-item">Cart</a>
-                                <a href="chackout.html" class="dropdown-item">Chackout</a>
-                                <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                                <a href="404.html" class="dropdown-item">404 Page</a>
-                            </div>
-                        </div>
-                        <a href="contact.html" class="nav-item nav-link">Contact</a>
-                    </div>
-                    <div class="d-flex m-3 me-0">
-                        <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fas fa-search text-primary"></i></button>
-                        <a href="#" class="position-relative me-4 my-auto">
-                            <i class="fa fa-shopping-bag fa-2x"></i>
-                            <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
-                        </a>
-                        <a href="#" class="my-auto">
-                            <i class="fas fa-user fa-2x"></i>
-                        </a>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </div>
-    <!-- Navbar End -->
-
-
-    <!-- Modal Search Start -->
+    include 'layout/header.php';
+    ?>
     <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content rounded-0">
@@ -163,7 +163,7 @@ $product = mysqli_fetch_assoc($run);
                             <p class="mb-3">Category: <?php echo htmlspecialchars($product['Category'] ?? 'N/A'); ?></p>
                             <h5 class="fw-bold mb-3">Rs <?php echo htmlspecialchars($product['Price']); ?></h5>
 
-                            <div class="d-flex mb-4">
+                            <div class="d-flex mb-3">
                                 <i class="fa fa-star text-secondary"></i>
                                 <i class="fa fa-star text-secondary"></i>
                                 <i class="fa fa-star text-secondary"></i>
@@ -171,7 +171,19 @@ $product = mysqli_fetch_assoc($run);
                                 <i class="fa fa-star"></i>
                             </div>
 
-                            <p class="mb-4"><?php echo nl2br(htmlspecialchars($product['Description'])); ?></p>
+                            <!-- Color Variants -->
+                            <div class="mb-4">
+                                <h6 class="fw-semibold mb-2">Available Colors:</h6>
+                                <div class="detail-color-variants">
+                                    <?php
+                                    $colorVariants = isset($product['ColorVariants']) ? explode(',', $product['ColorVariants']) : [];
+                                    foreach ($colorVariants as $color): ?>
+                                        <span class="detail-color-circle" style="background-color: <?php echo htmlspecialchars($color); ?>" title="<?php echo ucfirst($color); ?>" data-color="<?php echo htmlspecialchars($color); ?>"></span>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+
+                            <p class="mb-4"><?php echo nl2br(htmlspecialchars($product['shortdes'])); ?></p>
 
                             <div class="input-group quantity mb-5" style="width: 100px;">
                                 <button class="btn btn-sm btn-minus rounded-circle bg-light border">
@@ -187,6 +199,7 @@ $product = mysqli_fetch_assoc($run);
                                 <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
                             </a>
                         </div>
+
 
                         <div class="col-lg-12 mt-4">
                             <nav>
@@ -207,9 +220,7 @@ $product = mysqli_fetch_assoc($run);
                             </div>
                         </div>
                     </div>
-
                 </div>
-
 
                 <div class="col-lg-4 col-xl-3">
                     <div class="row g-4 fruite">
@@ -614,6 +625,24 @@ $product = mysqli_fetch_assoc($run);
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+
+    <script>
+        // Color variant selection
+        document.querySelectorAll('.detail-color-circle').forEach(circle => {
+            circle.addEventListener('click', function() {
+                // Remove active class from all circles
+                document.querySelectorAll('.detail-color-circle').forEach(c => {
+                    c.classList.remove('active');
+                });
+
+                this.classList.add('active');
+
+
+                const selectedColor = this.getAttribute('data-color');
+                console.log('Selected color:', selectedColor);
+            });
+        });
+    </script>
 </body>
 
 </html>

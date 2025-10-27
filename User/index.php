@@ -1,4 +1,3 @@
-<!--  -->
 <?php
 include 'connection.php';
 ?>
@@ -12,98 +11,163 @@ include 'connection.php';
     <meta content="" name="keywords">
     <meta content="" name="description">
 
-    <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap" rel="stylesheet">
 
-    <!-- Icon Font Stylesheet -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Libraries Stylesheet -->
     <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Include FontAwesome for icons -->
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <!-- Customized Bootstrap Stylesheet -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
 
     <style>
-        .fruite-item {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        .fruite-img {
-            height: 200px;
-
+        .home-fruite-img {
+            height: 200px !important;
             overflow: hidden;
-
         }
 
-        .fruite-img img {
+        .home-fruite-img img {
             object-fit: cover;
+            height: 100% !important;
             width: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        .home-fruite-item:hover .home-fruite-img img {
+            transform: scale(1.05);
+        }
+
+        .home-fruite-item {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .home-fruite-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .home-fruite-item .p-3 {
+            padding: 0.75rem !important;
+        }
+
+        .home-fruite-item h6 {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem !important;
+            line-height: 1.3;
+        }
+
+        .home-price-section {
+            margin-bottom: 0.5rem;
+        }
+
+        .home-price-section .current-price {
+            font-size: 1.1rem !important;
+            font-weight: 700;
+            color: #81c408;
+        }
+
+        .home-price-section .original-price {
+            font-size: 0.85rem;
+            color: #999;
+            text-decoration: line-through;
+            margin-left: 0.3rem;
+        }
+
+        .home-discount-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff6b6b;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .home-rating-stars {
+            color: #ffc107;
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .home-rating-stars i {
+            margin-right: 1px;
+        }
+
+        .home-fruite-item .btn {
+            padding: 0.35rem 0.7rem !important;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+
+        .hero-header {
+            padding-top: 3rem !important;
+            padding-bottom: 3rem !important;
+            margin-bottom: 2rem !important;
+        }
+
+        .hero-content h1 {
+            margin-bottom: 2rem !important;
+        }
+
+        .hero-search {
+            position: relative;
+            margin-bottom: 0;
+        }
+
+        .hero-search .form-control {
+            width: 75% !important;
+        }
+
+        @media (min-width: 992px) {
+            .hero-search .btn {
+                height: auto !important;
+                top: 50% !important;
+                transform: translateY(-50%);
+                padding: 0.75rem 1.75rem !important;
+                font-size: 1rem;
+            }
+        }
+
+        .hero-carousel {
             height: 100%;
         }
 
-        .fruite-item .p-4 {
-            flex-grow: 1;
-        }
-    </style>
-
-    <style>
-        .modal-side-right .modal-dialog {
-            transform: translateX(100%);
-            transition: transform 0.3s ease-in-out;
+        .hero-carousel .carousel-inner {
+            height: 100%;
         }
 
-        .modal.fade.show .modal-dialog {
-            transform: translateX(0);
+        .hero-carousel .carousel-item {
+            height: 450px;
         }
 
-        .modal-dialog {
-            max-width: 400px;
+        .hero-carousel .carousel-item img {
+            height: 100%;
+            object-fit: cover;
         }
 
-        .cart-item {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .cart-item-name p {
-            margin: 0;
-        }
-
-        .cart-total p {
-            font-weight: bold;
-        }
-    </style>
-
-
-    <style>
         .cart-popup {
             position: fixed;
             top: -100%;
             right: 20px;
-            width: 400px;
-            max-height: 650px;
+            width: 420px;
+            max-height: 680px;
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
             z-index: 9999;
             transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            border: 1px solid #e8e8e8;
         }
 
         .cart-popup.show {
@@ -111,66 +175,96 @@ include 'connection.php';
         }
 
         .cart-popup-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #2c3e50;
+            padding: 20px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .cart-popup-header h5 {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
+        }
+
+        .cart-popup-header i {
+            color: #495057;
         }
 
         .cart-popup-close {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(108, 117, 125, 0.1);
             border: none;
-            color: white;
-            width: 30px;
-            height: 30px;
+            color: #495057;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 18px;
-            transition: all 0.3s;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .cart-popup-close:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(108, 117, 125, 0.2);
             transform: rotate(90deg);
         }
 
         .cart-popup-body {
-            max-height: 380px;
+            max-height: 400px;
             overflow-y: auto;
-            padding: 15px;
+            padding: 20px;
             flex: 1;
+            background: #fafafa;
         }
 
         .cart-popup-body::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
         }
 
         .cart-popup-body::-webkit-scrollbar-track {
             background: #f1f1f1;
+            border-radius: 4px;
         }
 
         .cart-popup-body::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 3px;
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        .cart-popup-body::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
         }
 
         .cart-item {
             display: flex;
-            gap: 12px;
-            padding: 12px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            animation: slideIn 0.3s ease;
+            gap: 14px;
+            padding: 16px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            animation: slideIn 0.4s ease;
             position: relative;
+            border: 1px solid #e8e8e8;
+            transition: all 0.3s ease;
+        }
+
+        .cart-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
         }
 
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateX(20px);
+                transform: translateX(30px);
             }
 
             to {
@@ -180,11 +274,12 @@ include 'connection.php';
         }
 
         .cart-item-img {
-            width: 70px;
-            height: 70px;
+            width: 75px;
+            height: 75px;
             object-fit: cover;
-            border-radius: 8px;
+            border-radius: 10px;
             flex-shrink: 0;
+            border: 1px solid #e8e8e8;
         }
 
         .cart-item-details {
@@ -196,96 +291,106 @@ include 'connection.php';
             font-size: 14px;
             font-weight: 600;
             margin-bottom: 8px;
-            color: #333;
+            color: #2c3e50;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            padding-right: 25px;
+            padding-right: 30px;
         }
 
         .cart-item-price {
-            color: #667eea;
-            font-weight: bold;
+            color: #495057;
+            font-weight: 700;
             font-size: 16px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .quantity-controls {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .quantity-btn {
-            background: #667eea;
+            background: #6c757d;
             color: white;
             border: none;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
+            transition: all 0.2s ease;
             padding: 0;
             line-height: 1;
-            font-weight: bold;
+            font-weight: 600;
         }
 
         .quantity-btn:hover {
-            background: #5568d3;
-            transform: scale(1.1);
+            background: #495057;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
         }
 
         .quantity-btn:active {
-            transform: scale(0.95);
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(108, 117, 125, 0.3);
         }
 
         .quantity-display {
-            min-width: 35px;
+            min-width: 40px;
             text-align: center;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 15px;
-            color: #333;
-            background: white;
-            padding: 4px 10px;
-            border-radius: 5px;
-            border: 2px solid #e0e0e0;
+            color: #2c3e50;
+            background: #f8f9fa;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            transition: all 0.3s ease;
+        }
+
+        .quantity-display.updating {
+            background: #e9ecef;
+            transform: scale(1.1);
         }
 
         .cart-item-remove {
             position: absolute;
-            top: 8px;
-            right: 8px;
+            top: 12px;
+            right: 12px;
             background: #dc3545;
             color: white;
             border: none;
-            width: 24px;
-            height: 24px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
             cursor: pointer;
             font-size: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             padding: 0;
             line-height: 1;
-            font-weight: bold;
+            font-weight: 600;
+            opacity: 0.9;
         }
 
         .cart-item-remove:hover {
             background: #c82333;
             transform: scale(1.15);
+            opacity: 1;
         }
 
         .cart-subtotal {
-            padding: 15px 20px;
-            background: #fff;
-            border-top: 2px solid #e0e0e0;
-            border-bottom: 2px solid #e0e0e0;
+            padding: 20px 24px;
+            background: white;
+            border-top: 2px solid #e9ecef;
+            border-bottom: 2px solid #e9ecef;
         }
 
         .cart-subtotal-row {
@@ -297,41 +402,47 @@ include 'connection.php';
         .cart-subtotal-label {
             font-size: 16px;
             font-weight: 600;
-            color: #333;
+            color: #495057;
         }
 
         .cart-subtotal-amount {
-            font-size: 22px;
-            font-weight: bold;
-            color: #667eea;
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
         }
 
         .cart-popup-footer {
-            padding: 15px 20px;
+            padding: 20px 24px;
             background: #f8f9fa;
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
 
         .cart-popup-footer button {
             flex: 1;
-            padding: 12px;
+            padding: 14px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             font-size: 14px;
         }
 
         .btn-view-cart {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #2c3e50;
             color: white;
         }
 
         .btn-view-cart:hover {
+            background: #1a252f;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 6px 20px rgba(44, 62, 80, 0.3);
+        }
+
+        .btn-view-cart:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
 
         .btn-clear-cart {
@@ -343,73 +454,293 @@ include 'connection.php';
         .btn-clear-cart:hover {
             background: #dc3545;
             color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 53, 69, 0.3);
         }
 
         .empty-cart {
             text-align: center;
-            padding: 50px 20px;
-            color: #999;
+            padding: 60px 20px;
+            color: #adb5bd;
         }
 
         .empty-cart i {
-            font-size: 60px;
-            margin-bottom: 15px;
-            opacity: 0.5;
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.4;
+        }
+
+        .empty-cart p {
+            font-size: 16px;
+            font-weight: 500;
         }
 
         .cart-badge {
             background: #dc3545;
             color: white;
             border-radius: 12px;
-            padding: 3px 10px;
+            padding: 4px 10px;
             font-size: 12px;
-            font-weight: bold;
+            font-weight: 700;
             margin-left: 8px;
+            min-width: 24px;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: white;
+            padding: 16px 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 300px;
+            max-width: 400px;
+            animation: slideInRight 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border-left: 4px solid #28a745;
+        }
+
+        .toast.error {
+            border-left-color: #dc3545;
+        }
+
+        .toast.info {
+            border-left-color: #17a2b8;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .toast.hiding {
+            animation: slideOutRight 0.3s ease forwards;
+        }
+
+        @keyframes slideOutRight {
+            to {
+                opacity: 0;
+                transform: translateX(120%);
+            }
+        }
+
+        .toast-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+            background: #d4edda;
+            color: #28a745;
+        }
+
+        .toast.error .toast-icon {
+            background: #f8d7da;
+            color: #dc3545;
+        }
+
+        .toast.info .toast-icon {
+            background: #d1ecf1;
+            color: #17a2b8;
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+
+        .toast-message {
+            font-size: 13px;
+            color: #6c757d;
+            line-height: 1.4;
+        }
+
+        .toast-close {
+            background: transparent;
+            border: none;
+            color: #adb5bd;
+            cursor: pointer;
+            font-size: 20px;
+            line-height: 1;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .toast-close:hover {
+            background: #f8f9fa;
+            color: #495057;
+        }
+
+        @media (max-width: 991px) {
+            .hero-header {
+                padding-top: 2rem !important;
+                padding-bottom: 2rem !important;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem !important;
+                margin-bottom: 1.5rem !important;
+            }
+
+            .hero-carousel .carousel-item {
+                height: 300px;
+            }
+
+            .hero-search .form-control {
+                width: 100% !important;
+            }
+
+            .hero-search .btn {
+                position: relative !important;
+                right: 0 !important;
+                width: 100%;
+                margin-top: 0.75rem;
+            }
         }
 
         @media (max-width: 576px) {
+            .hero-header {
+                padding-top: 1.5rem !important;
+                padding-bottom: 1.5rem !important;
+                margin-bottom: 1.5rem !important;
+            }
+
+            .hero-content h1 {
+                font-size: 1.5rem !important;
+                margin-bottom: 1rem !important;
+            }
+
+            .hero-carousel .carousel-item {
+                height: 250px;
+            }
+
+            .hero-search .form-control {
+                padding: 0.75rem 1rem !important;
+                font-size: 0.9rem;
+            }
+
+            .hero-search .btn {
+                padding: 0.75rem 1.5rem !important;
+                font-size: 0.9rem;
+            }
+
+            .home-fruite-img {
+                height: 160px !important;
+            }
+
+            .home-fruite-item h6 {
+                font-size: 0.8rem;
+            }
+
+            .home-price-section .current-price {
+                font-size: 0.95rem !important;
+            }
+
+            .home-price-section .original-price {
+                font-size: 0.75rem;
+            }
+
+            .home-fruite-item .btn {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.5rem !important;
+            }
+
+            .home-fruite-item .p-3 {
+                padding: 0.5rem !important;
+            }
+
+            .home-rating-stars {
+                font-size: 0.7rem;
+            }
+
+            .home-discount-badge {
+                font-size: 0.65rem;
+                padding: 0.15rem 0.4rem;
+            }
+
             .cart-popup {
                 width: 95%;
                 right: 2.5%;
             }
         }
+
+        @media (min-width: 577px) and (max-width: 768px) {
+            .home-fruite-img {
+                height: 180px !important;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 992px) {
+            .home-fruite-img {
+                height: 190px !important;
+            }
+        }
     </style>
-
-
 </head>
 
 <body>
+    <div class="toast-container" id="toastContainer"></div>
 
-    <!-- Spinner Start -->
-    <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
+    <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-grow text-primary" role="status"></div>
     </div>
-  
 
-    <?php 
+    <?php include 'layout/header.php'; ?>
 
-include 'layout/header.php';
-?>
-    <div class="container-fluid py-5 mb-5 hero-header">
-        <div class="container py-5">
-            <div class="row g-5 align-items-center">
-                <div class="col-md-12 col-lg-7">
-                    <h4 class="mb-3 text-secondary">100% Organic Foods</h4>
-                    <h1 class="mb-5 display-3 text-primary">Organic Veggies & Fruits Foods</h1>
-                    <div class="position-relative mx-auto">
-                        <input class="form-control border-2 border-secondary w-75 py-3 px-4 rounded-pill" type="number" placeholder="Search">
+    <div class="container-fluid py-3 mb-3 hero-header">
+        <div class="container py-3">
+            <div class="row g-4 align-items-center">
+                <div class="col-md-12 col-lg-5 hero-content">
+                    <h1 class="mb-3 display-3 text-primary">Organic Veggies & Fruits Foods</h1>
+                    <div class="hero-search">
+                        <input class="form-control border-2 border-secondary w-75 py-3 px-4 rounded-pill" type="text" placeholder="Search">
                         <button type="submit" class="btn btn-primary border-2 border-secondary py-3 px-4 position-absolute rounded-pill text-white h-100" style="top: 0; right: 25%;">Submit Now</button>
                     </div>
                 </div>
-                <div class="col-md-12 col-lg-5">
-                    <div id="carouselId" class="carousel slide position-relative" data-bs-ride="carousel">
+                <div class="col-md-12 col-lg-7">
+                    <div id="carouselId" class="carousel slide position-relative hero-carousel" data-bs-ride="carousel" data-bs-interval="4000">
                         <div class="carousel-inner" role="listbox">
                             <div class="carousel-item active rounded">
-                                <img src="img/hero-img-1.png" class="img-fluid w-100 h-100 bg-secondary rounded" alt="First slide">
+                                <img src="img/hero-img-1.png" class="img-fluid w-100 bg-secondary rounded" alt="First slide">
                                 <a href="#" class="btn px-4 py-2 text-white rounded">Fruites</a>
                             </div>
                             <div class="carousel-item rounded">
-                                <img src="img/hero-img-2.jpg" class="img-fluid w-100 h-100 rounded" alt="Second slide">
+                                <img src="img/hero-img-2.jpg" class="img-fluid w-100 rounded" alt="Second slide">
                                 <a href="#" class="btn px-4 py-2 text-white rounded">Vesitables</a>
                             </div>
                         </div>
@@ -426,64 +757,7 @@ include 'layout/header.php';
             </div>
         </div>
     </div>
-    <!-- Hero End -->
 
-
-    <!-- Featurs Section Start -->
-    <div class="container-fluid featurs py-5">
-        <div class="container py-5">
-            <div class="row g-4">
-                <div class="col-md-6 col-lg-3">
-                    <div class="featurs-item text-center rounded bg-light p-4">
-                        <div class="featurs-icon btn-square rounded-circle bg-secondary mb-5 mx-auto">
-                            <i class="fas fa-car-side fa-3x text-white"></i>
-                        </div>
-                        <div class="featurs-content text-center">
-                            <h5>Free Shipping</h5>
-                            <p class="mb-0">Free on order over $300</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="featurs-item text-center rounded bg-light p-4">
-                        <div class="featurs-icon btn-square rounded-circle bg-secondary mb-5 mx-auto">
-                            <i class="fas fa-user-shield fa-3x text-white"></i>
-                        </div>
-                        <div class="featurs-content text-center">
-                            <h5>Security Payment</h5>
-                            <p class="mb-0">100% security payment</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="featurs-item text-center rounded bg-light p-4">
-                        <div class="featurs-icon btn-square rounded-circle bg-secondary mb-5 mx-auto">
-                            <i class="fas fa-exchange-alt fa-3x text-white"></i>
-                        </div>
-                        <div class="featurs-content text-center">
-                            <h5>30 Day Return</h5>
-                            <p class="mb-0">30 day money guarantee</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="featurs-item text-center rounded bg-light p-4">
-                        <div class="featurs-icon btn-square rounded-circle bg-secondary mb-5 mx-auto">
-                            <i class="fa fa-phone-alt fa-3x text-white"></i>
-                        </div>
-                        <div class="featurs-content text-center">
-                            <h5>24/7 Support</h5>
-                            <p class="mb-0">Support every time fast</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Featurs Section End -->
-
-
-    <!-- Fruits Shop Start-->
     <div class="container-fluid fruite py-5">
         <div class="container py-5">
             <div class="tab-class text-center">
@@ -491,82 +765,70 @@ include 'layout/header.php';
                     <div class="col-lg-4 text-start">
                         <h1>Our Organic Products</h1>
                     </div>
-                    <div class="col-lg-8 text-end">
-                        <ul class="nav nav-pills d-inline-flex text-center mb-5">
-                            <li class="nav-item">
-                                <a class="d-flex m-2 py-2 bg-light rounded-pill active" data-bs-toggle="pill" href="#tab-1">
-                                    <span class="text-dark" style="width: 130px;">All Products</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="d-flex py-2 m-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-2">
-                                    <span class="text-dark" style="width: 130px;">Vegetables</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="d-flex m-2 py-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-3">
-                                    <span class="text-dark" style="width: 130px;">Fruits</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="d-flex m-2 py-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-4">
-                                    <span class="text-dark" style="width: 130px;">Bread</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="d-flex m-2 py-2 bg-light rounded-pill" data-bs-toggle="pill" href="#tab-5">
-                                    <span class="text-dark" style="width: 130px;">Meat</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
-
 
                 <div class="tab-content">
                     <div id="tab-1" class="tab-pane fade show p-0 active">
-                        <div class="row g-4">
+                        <div class="row g-3">
                             <?php
-                            include 'connection.php';
-                            $query = "SELECT * FROM `product_info` ORDER BY Id DESC";
+                            $query = "SELECT * FROM `product_info` ORDER BY Id DESC LIMIT 8";
                             $run = mysqli_query($connect, $query);
 
                             if (mysqli_num_rows($run) > 0) {
                                 while ($row = mysqli_fetch_assoc($run)) {
-                                    $stockClass = $row['Stock'] == 'InStock' ? 'success' : 'danger';
                                     $productId = $row['Id'];
                                     $productName = htmlspecialchars($row['Name']);
                                     $productPrice = htmlspecialchars($row['Price']);
                                     $productThumb = htmlspecialchars($row['Thumbnail']);
+                                    $shortdes = htmlspecialchars($row['shortdes']);
+                                    $category = htmlspecialchars($row['Category'] ?? 'Product');
+
+                                    $discountPrice = $productPrice * 0.85;
+                                    $discountPercent = 15;
 
                                     echo '
-            <div class="col-md-6 col-lg-4 col-xl-3">
-                <div class="rounded position-relative fruite-item border shadow-sm h-100 d-flex flex-column">
-                    <div class="fruite-img position-relative" style="overflow: hidden;">
-                        <a href="product_detail.php?id=' . $productId . '">
-                            <img src="../Admin/' . $productThumb . '" class="img-fluid w-100 rounded-top" alt="" style="object-fit: cover; height: 230px;">
-                        </a>
-                        <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" 
-                            style="top: 10px; left: 10px;">' . htmlspecialchars($row['Category'] ?? 'Product') . '</div>
-                    </div>
+                            <div class="col-6 col-md-6 col-lg-6 col-xl-3">
+                                <div class="rounded position-relative home-fruite-item border shadow-sm h-100 d-flex flex-column">
+                                    <div class="home-fruite-img position-relative">
+                                        <a href="product_detail.php?id=' . $productId . '">
+                                            <img src="../Admin/' . $productThumb . '" class="img-fluid w-100 rounded-top" alt="' . $productName . '">
+                                        </a>
+                                        <div class="text-white bg-secondary px-2 py-1 rounded position-absolute" 
+                                            style="top: 10px; left: 10px; font-size: 0.75rem;">' . $category . '</div>
+                                        <div class="home-discount-badge">' . $discountPercent . '% OFF</div>
+                                    </div>
 
-                    <div class="p-4 border border-secondary border-top-0 rounded-bottom d-flex flex-column justify-content-between flex-grow-1">
-                        <div>
-                            <h5 class="fw-semibold mb-2">' . $productName . '</h5>
-                            <p class="text-muted mb-3" style="min-height: 50px;">' . htmlspecialchars(substr($row['Description'], 0, 80)) . '...</p>
-                        </div>
+                                    <div class="p-3 border border-secondary border-top-0 rounded-bottom d-flex flex-column justify-content-between flex-grow-1">
+                                        <div>
+                                            <h6 class="fw-semibold mb-2">' . $productName . '</h6>
+                                            <div class="product-description text-muted mb-3">
+                                                ' . $shortdes . '
+                                            </div>
+                                            <div class="home-rating-stars mb-2">
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                                                <i class="fas fa-star-half-alt"></i>
+                                                <span class="text-muted ms-1">(4.5)</span>
+                                            </div>
 
-                        <div class="d-flex justify-content-between align-items-center mt-auto pt-2">
-                            <p class="text-dark fs-5 fw-bold mb-0">Rs ' . $productPrice . '</p>
-                            <button type="button" 
-                                class="btn border border-secondary rounded-pill px-3 text-primary btn-add-to-cart"
-                                onclick="event.stopPropagation(); addToCart(\'' . $productId . '\', \'' . addslashes($productName) . '\', \'' . $productPrice . '\', \'' . $productThumb . '\');">
-                                <i class="fa fa-shopping-cart me-2 text-primary"></i> Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>';
+                                            <div class="home-price-section">
+                                                <span class="current-price">Rs ' . number_format($discountPrice, 0) . '</span>
+                                                <span class="original-price">Rs ' . $productPrice . '</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between align-items-center mt-2">
+                                            <button type="button" 
+                                                class="btn bg-black border border-secondary rounded-pill text-white w-100 btn-add-to-cart"
+                                                onclick="event.stopPropagation(); addToCart(\'' . $productId . '\', \'' . addslashes($productName) . '\', \'' . $discountPrice . '\', \'' . $productThumb . '\');">
+                                                <i class="fa fa-shopping-cart me-1"></i> Add to Cart
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>';
                                 }
                             } else {
                                 echo '<p class="text-center">No products found.</p>';
@@ -575,15 +837,10 @@ include 'layout/header.php';
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
-    <!-- Fruits Shop End-->
 
-
-    <!-- Featurs Start -->
     <div class="container-fluid service py-5">
         <div class="container py-5">
             <div class="row g-4 justify-content-center">
@@ -629,10 +886,7 @@ include 'layout/header.php';
             </div>
         </div>
     </div>
-    <!-- Featurs End -->
 
-
-    <!-- Vesitable Shop Start-->
     <div class="container-fluid vesitable py-5">
         <div class="container py-5">
             <h1 class="mb-0">Fresh Organic Vegetables</h1>
@@ -721,41 +975,10 @@ include 'layout/header.php';
                         </div>
                     </div>
                 </div>
-                <div class="border border-primary rounded position-relative vesitable-item">
-                    <div class="vesitable-img">
-                        <img src="img/vegetable-item-5.jpg" class="img-fluid w-100 rounded-top" alt="">
-                    </div>
-                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Vegetable</div>
-                    <div class="p-4 rounded-bottom">
-                        <h4>Potatoes</h4>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                        <div class="d-flex justify-content-between flex-lg-wrap">
-                            <p class="text-dark fs-5 fw-bold mb-0">$7.99 / kg</p>
-                            <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="border border-primary rounded position-relative vesitable-item">
-                    <div class="vesitable-img">
-                        <img src="img/vegetable-item-6.jpg" class="img-fluid w-100 rounded-top" alt="">
-                    </div>
-                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Vegetable</div>
-                    <div class="p-4 rounded-bottom">
-                        <h4>Parsely</h4>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                        <div class="d-flex justify-content-between flex-lg-wrap">
-                            <p class="text-dark fs-5 fw-bold mb-0">$7.99 / kg</p>
-                            <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
-    <!-- Vesitable Shop End -->
 
-
-    <!-- Banner Section Start-->
     <div class="container-fluid banner bg-secondary my-5">
         <div class="container py-5">
             <div class="row g-4 align-items-center">
@@ -782,10 +1005,7 @@ include 'layout/header.php';
             </div>
         </div>
     </div>
-    <!-- Banner Section End -->
 
-
-    <!-- Bestsaler Product Start -->
     <div class="container-fluid py-5">
         <div class="container py-5">
             <div class="text-center mx-auto mb-5" style="max-width: 700px;">
@@ -856,144 +1076,10 @@ include 'layout/header.php';
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-xl-4">
-                    <div class="p-4 rounded bg-light">
-                        <div class="row align-items-center">
-                            <div class="col-6">
-                                <img src="img/best-product-4.jpg" class="img-fluid rounded-circle w-100" alt="">
-                            </div>
-                            <div class="col-6">
-                                <a href="#" class="h5">Organic Tomato</a>
-                                <div class="d-flex my-3">
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star"></i>
-                                </div>
-                                <h4 class="mb-3">3.12 $</h4>
-                                <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-xl-4">
-                    <div class="p-4 rounded bg-light">
-                        <div class="row align-items-center">
-                            <div class="col-6">
-                                <img src="img/best-product-5.jpg" class="img-fluid rounded-circle w-100" alt="">
-                            </div>
-                            <div class="col-6">
-                                <a href="#" class="h5">Organic Tomato</a>
-                                <div class="d-flex my-3">
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star"></i>
-                                </div>
-                                <h4 class="mb-3">3.12 $</h4>
-                                <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-xl-4">
-                    <div class="p-4 rounded bg-light">
-                        <div class="row align-items-center">
-                            <div class="col-6">
-                                <img src="img/best-product-6.jpg" class="img-fluid rounded-circle w-100" alt="">
-                            </div>
-                            <div class="col-6">
-                                <a href="#" class="h5">Organic Tomato</a>
-                                <div class="d-flex my-3">
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star"></i>
-                                </div>
-                                <h4 class="mb-3">3.12 $</h4>
-                                <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-6 col-xl-3">
-                    <div class="text-center">
-                        <img src="img/fruite-item-1.jpg" class="img-fluid rounded" alt="">
-                        <div class="py-4">
-                            <a href="#" class="h5">Organic Tomato</a>
-                            <div class="d-flex my-3 justify-content-center">
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <h4 class="mb-3">3.12 $</h4>
-                            <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-6 col-xl-3">
-                    <div class="text-center">
-                        <img src="img/fruite-item-2.jpg" class="img-fluid rounded" alt="">
-                        <div class="py-4">
-                            <a href="#" class="h5">Organic Tomato</a>
-                            <div class="d-flex my-3 justify-content-center">
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <h4 class="mb-3">3.12 $</h4>
-                            <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-6 col-xl-3">
-                    <div class="text-center">
-                        <img src="img/fruite-item-3.jpg" class="img-fluid rounded" alt="">
-                        <div class="py-4">
-                            <a href="#" class="h5">Organic Tomato</a>
-                            <div class="d-flex my-3 justify-content-center">
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <h4 class="mb-3">3.12 $</h4>
-                            <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-6 col-xl-3">
-                    <div class="text-center">
-                        <img src="img/fruite-item-4.jpg" class="img-fluid rounded" alt="">
-                        <div class="py-2">
-                            <a href="#" class="h5">Organic Tomato</a>
-                            <div class="d-flex my-3 justify-content-center">
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star text-primary"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <h4 class="mb-3">3.12 $</h4>
-                            <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
-    <!-- Bestsaler Product End -->
 
-
-    <!-- Fact Start -->
     <div class="container-fluid py-5">
         <div class="container">
             <div class="bg-light p-5 rounded">
@@ -1299,6 +1385,7 @@ include 'layout/header.php';
             </button>
         </div>
     </div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
