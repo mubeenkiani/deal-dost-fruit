@@ -1,235 +1,165 @@
-<?php 
-    $alert = "";
-    include 'connection.php';
-    if (isset($_POST['submit'])) {
+<?php
+include 'connection.php';
+session_start();
 
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+$error = "";
+$success = "";
 
-        $sql = "SELECT * FROM `admin_signup` WHERE Email = '$email' AND Password = '$password'";
-        $run = mysqli_query($connect,$sql);
-        session_start();
-        
-        if (mysqli_num_rows($run)>0) {
-            $row = mysqli_fetch_assoc($run);
-            $_SESSION['email'] = $email;
-            $_SESSION['id'] = $row['ID'];
+// Redirect if already logged in
+if (isset($_SESSION['admin_id'])) {
+  header("Location: index.php");
+  exit();
+}
 
-            $alert = "<div class='alert alert-success'>Login SuccessFully</div>";
-            header("location:index.php");
+if (isset($_POST['submit'])) {
+  $email = trim($_POST['email']);
+  $password = trim($_POST['password']);
 
-            } else {
-            $alert = "<div class='alert alert-danger mb-2 text-center'>Kindly Check Your Information</div>";
-            }    
-        }
-        session_write_close();
+  // Step 1: Validation
+  if (empty($email) || empty($password)) {
+    $error = "⚠️ Please fill in both email and password fields.";
+  } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $error = "❌ Please enter a valid email address.";
+  } elseif (strlen($password) < 6) {
+    $error = "🔒 Password must be at least 6 characters.";
+  } else {
+    // Step 2: Secure email input
+    $email = mysqli_real_escape_string($connect, $email);
+
+    // Step 3: Check if user exists
+    $query = "SELECT * FROM `admin_signup` WHERE `Email` = '$email' LIMIT 1";
+    $result = mysqli_query($connect, $query);
+
+    if ($result && mysqli_num_rows($result) === 1) {
+      $user = mysqli_fetch_assoc($result);
+
+      // Step 4: Check if reset token is active (prevent login during reset)
+      if (!empty($user['reset_token']) && strtotime($user['reset_expires']) > time()) {
+        $error = "🔑 Password reset is in progress. Please reset your password using the link sent to your email.";
+      } 
+      // Step 5: Verify hashed password
+      elseif (password_verify($password, $user['Password'])) {
+        // Step 6: Successful login
+        $_SESSION['admin_id'] = $user['ID'];
+        $_SESSION['admin_username'] = $user['User_Name'];
+
+        $success = "✅ Login successful! Redirecting...";
+        echo "<script>
+                setTimeout(function() {
+                  window.location.href = 'index.php';
+                }, 1500);
+              </script>";
+      } else {
+        $error = "❌ Incorrect password. Please try again.";
+      }
+    } else {
+      $error = "⚠️ No account found with this email address.";
+    }
+  }
+}
 ?>
 <!DOCTYPE html>
-<html lang="en" class="light-style layout-wide  customizer-hide" dir="ltr" data-theme="theme-default" data-assets-path="assets/" data-template="vertical-menu-template">
+<html lang="en" class="light-style layout-wide customizer-hide" dir="ltr" data-theme="theme-default" data-assets-path="assets/" data-template="vertical-menu-template">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-
-    <title>Materio</title>
-
-    
-    <meta name="description" content="Start your development with a Dashboard for Bootstrap 5" />
-    <meta name="keywords" content="dashboard, material, material design, bootstrap 5 dashboard, bootstrap 5 design, bootstrap 5">
-    <!-- Canonical SEO -->
-    <link rel="canonical" href="https://themeselection.com/item/materio-bootstrap-html-admin-template/">
-    
-    
-    <!-- ? PROD Only: Google Tag Manager (Default ThemeSelection: GTM-5DDHKGP, PixInvent: GTM-5J3LMKC) -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      '../../../../www.googletagmanager.com/gtm5445.html?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-5DDHKGP');</script>
-    <!-- End Google Tag Manager -->
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="assets/img/favicon/favicon.ico" />
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com/">
-    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;ampdisplay=swap" rel="stylesheet">
-
-    <!-- Icons -->
-    <link rel="stylesheet" href="assets/vendor/fonts/materialdesignicons.css" />
-    <link rel="stylesheet" href="assets/vendor/fonts/flag-icons.css" />
-    
-    <!-- Menu waves for no-customizer fix -->
-    <link rel="stylesheet" href="assets/vendor/libs/node-waves/node-waves.css" />
-
-    <!-- Core CSS -->
-    <link rel="stylesheet" href="assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="assets/css/demo.css" />
-    
-    <!-- Vendors CSS -->
-    <link rel="stylesheet" href="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-    <link rel="stylesheet" href="assets/vendor/libs/typeahead-js/typeahead.css" /> 
-    <!-- Vendor -->
-<link rel="stylesheet" href="assets/vendor/libs/%40form-validation/umd/styles/index.min.css" />
-
-    <!-- Page CSS -->
-    <!-- Page -->
-<link rel="stylesheet" href="assets/vendor/css/pages/page-auth.css">
-
-    <!-- Helpers -->
-    <script src="assets/vendor/js/helpers.js"></script>
-    <script src="assets/js/config.js"></script>
-    
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Deal Dost Admin Panel - Sign In</title>
+  <meta name="description" content="Deal Dost Admin Login" />
+  <link rel="icon" type="image/x-icon" href="assets/img/favicon/favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/vendor/fonts/materialdesignicons.css" />
+  <link rel="stylesheet" href="assets/vendor/fonts/flag-icons.css" />
+  <link rel="stylesheet" href="assets/vendor/libs/node-waves/node-waves.css" />
+  <link rel="stylesheet" href="assets/vendor/css/rtl/core.css" />
+  <link rel="stylesheet" href="assets/vendor/css/rtl/theme-default.css" />
+  <link rel="stylesheet" href="assets/css/demo.css" />
+  <link rel="stylesheet" href="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+  <link rel="stylesheet" href="assets/vendor/libs/typeahead-js/typeahead.css" />
+  <link rel="stylesheet" href="assets/vendor/libs/@form-validation/umd/styles/index.min.css" />
+  <link rel="stylesheet" href="assets/vendor/css/pages/page-auth.css">
+  <script src="assets/vendor/js/helpers.js"></script>
+  <script src="assets/js/config.js"></script>
+  <style>
+    .alert {
+      border-radius: 10px;
+      font-size: 15px;
+      margin-bottom: 15px;
+    }
+  </style>
 </head>
-
 <body>
+  <div class="position-relative">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+      <div class="authentication-inner py-4">
+        <div class="card p-3">
+          <div class="app-brand justify-content-center mt-4">
+            <a href="#" class="app-brand-link gap-2">
+              <span class="app-brand-logo demo">
+                <svg width="30" height="24" viewBox="0 0 250 196" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M12.3 1.25L56.65 28.64C59.03 30.11 60.48 32.71 60.48 35.51V160.63C60.48 163.47 58.99 166.1 56.56 167.55L12.2 194.11C8.38 196.4 3.43 195.15 1.14 191.33C0.39 190.08 0 188.64 0 187.18V8.12C0 3.66 3.61 0.05 8.06 0.05C9.56 0.05 11.03 0.47 12.3 1.25Z" fill="currentColor"/>
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M237.72 1.19L125 70.31V136.87L250 65.25V8.07C250 3.61 246.39 0 241.93 0C240.45 0 238.99 0.41 237.72 1.19Z" fill="currentColor"/>
+                </svg>
+              </span>
+              <span class="app-brand-text demo text-heading fw-semibold">Deal Dost Admin</span>
+            </a>
+          </div>
+          <div class="card-body mt-2">
+            <h4 class="mb-3 text-center">Welcome Back 👋</h4>
+            <p class="mb-4 text-center">Sign in to manage your admin panel</p>
 
-  
-  <!-- ?PROD Only: Google Tag Manager (noscript) (Default ThemeSelection: GTM-5DDHKGP, PixInvent: GTM-5J3LMKC) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5DDHKGP" height="0" width="0" style="display: none; visibility: hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
-  
-  <!-- Content -->
+            <?php if (!empty($error)): ?>
+              <div class="alert alert-danger text-center py-2" role="alert">
+                <?= htmlspecialchars($error) ?>
+              </div>
+            <?php elseif (!empty($success)): ?>
+              <div class="alert alert-success text-center py-2" role="alert">
+                <?= htmlspecialchars($success) ?>
+              </div>
+            <?php endif; ?>
 
-<div class="position-relative">
-  <div class="authentication-wrapper authentication-basic container-p-y">
-    <div class="authentication-inner py-4">
-
-      <!-- Login -->
-      <div class="card p-2">
-        <!-- Logo -->
-        <div class="app-brand justify-content-center mt-5">
-          <a href="index-2.html" class="app-brand-link gap-2">
-            <span class="app-brand-logo demo">
-<span style="color:#9055FD;">
-  <svg width="30" height="24" viewBox="0 0 250 196" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.3002 1.25469L56.655 28.6432C59.0349 30.1128 60.4839 32.711 60.4839 35.5089V160.63C60.4839 163.468 58.9941 166.097 56.5603 167.553L12.2055 194.107C8.3836 196.395 3.43136 195.15 1.14435 191.327C0.395485 190.075 0 188.643 0 187.184V8.12039C0 3.66447 3.61061 0.0522461 8.06452 0.0522461C9.56056 0.0522461 11.0271 0.468577 12.3002 1.25469Z" fill="currentColor" />
-    <path opacity="0.077704" fill-rule="evenodd" clip-rule="evenodd" d="M0 65.2656L60.4839 99.9629V133.979L0 65.2656Z" fill="black" />
-    <path opacity="0.077704" fill-rule="evenodd" clip-rule="evenodd" d="M0 65.2656L60.4839 99.0795V119.859L0 65.2656Z" fill="black" />
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M237.71 1.22393L193.355 28.5207C190.97 29.9889 189.516 32.5905 189.516 35.3927V160.631C189.516 163.469 191.006 166.098 193.44 167.555L237.794 194.108C241.616 196.396 246.569 195.151 248.856 191.328C249.605 190.076 250 188.644 250 187.185V8.09597C250 3.64006 246.389 0.027832 241.935 0.027832C240.444 0.027832 238.981 0.441882 237.71 1.22393Z" fill="currentColor" />
-    <path opacity="0.077704" fill-rule="evenodd" clip-rule="evenodd" d="M250 65.2656L189.516 99.8897V135.006L250 65.2656Z" fill="black" />
-    <path opacity="0.077704" fill-rule="evenodd" clip-rule="evenodd" d="M250 65.2656L189.516 99.0497V120.886L250 65.2656Z" fill="black" />
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.2787 1.18923L125 70.3075V136.87L0 65.2465V8.06814C0 3.61223 3.61061 0 8.06452 0C9.552 0 11.0105 0.411583 12.2787 1.18923Z" fill="currentColor" />
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.2787 1.18923L125 70.3075V136.87L0 65.2465V8.06814C0 3.61223 3.61061 0 8.06452 0C9.552 0 11.0105 0.411583 12.2787 1.18923Z" fill="white" fill-opacity="0.15" />
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M237.721 1.18923L125 70.3075V136.87L250 65.2465V8.06814C250 3.61223 246.389 0 241.935 0C240.448 0 238.99 0.411583 237.721 1.18923Z" fill="currentColor" />
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M237.721 1.18923L125 70.3075V136.87L250 65.2465V8.06814C250 3.61223 246.389 0 241.935 0C240.448 0 238.99 0.411583 237.721 1.18923Z" fill="white" fill-opacity="0.3" />
-  </svg>
-</span>
-</span>
-            <span class="app-brand-text demo text-heading fw-semibold">Materio</span>
-          </a>
-        </div>
-        <!-- /Logo -->
-
-        <div class="card-body mt-2">
-          <h4 class="mb-4 text-center">Welcome to Materio! 👋</h4>
-
-          <form class="mb-3"method="POST">
-            <?php echo $alert ?>
-            <div class="form-floating form-floating-outline mb-3">
-              <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email or username" autofocus>
-              <label for="email">Email or Username</label>
-            </div>
-            <div class="mb-3">
-              <div class="form-password-toggle">
+            <form method="POST" autocomplete="off" class="mb-3">
+              <div class="form-floating form-floating-outline mb-3">
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" 
+                       value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>" required>
+                <label for="email">Email</label>
+              </div>
+              <div class="mb-3 form-password-toggle">
                 <div class="input-group input-group-merge">
                   <div class="form-floating form-floating-outline">
-                    <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                    <input type="password" id="password" class="form-control" name="password" 
+                           placeholder="************" required minlength="6" autocomplete="new-password" />
                     <label for="password">Password</label>
                   </div>
                   <span class="input-group-text cursor-pointer"><i class="mdi mdi-eye-off-outline"></i></span>
                 </div>
               </div>
-            </div>
-            <div class="mb-3 d-flex justify-content-between">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="remember-me">
-                <label class="form-check-label" for="remember-me">
-                  Remember Me
-                </label>
+
+              <div class="mb-3 d-flex justify-content-between align-items-center">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="remember-me">
+                  <label class="form-check-label" for="remember-me">Remember Me</label>
+                </div>
+                <a href="forgot-password.php" class="text-primary">Forgot Password?</a>
               </div>
-              <a href="auth-forgot-password-basic.html" class="float-end mb-1">
-                <span>Forgot Password?</span>
-              </a>
-            </div>
-            <div class="mb-3">
-              <button class="btn btn-primary d-grid w-100" name="submit">Sign in</button>
-            </div>
-          </form>
 
-          <p class="text-center">
-            <span>New on our platform?</span>
-            <a href="register.php">
-              <span>Create an account</span>
-            </a>
-          </p>
+              <button type="submit" name="submit" class="btn btn-primary d-grid w-100">Sign In</button>
+            </form>
 
-          <div class="divider my-4">
-            <div class="divider-text">or</div>
-          </div>
-
-          <div class="d-flex justify-content-center gap-2">
-            <a href="javascript:;" class="btn btn-icon btn-lg rounded-pill btn-text-facebook">
-              <i class="tf-icons mdi mdi-24px mdi-facebook"></i>
-            </a>
-
-            <a href="javascript:;" class="btn btn-icon btn-lg rounded-pill btn-text-twitter">
-              <i class="tf-icons mdi mdi-24px mdi-twitter"></i>
-            </a>
-
-            <a href="javascript:;" class="btn btn-icon btn-lg rounded-pill btn-text-github">
-              <i class="tf-icons mdi mdi-24px mdi-github"></i>
-            </a>
-
-            <a href="javascript:;" class="btn btn-icon btn-lg rounded-pill btn-text-google-plus">
-              <i class="tf-icons mdi mdi-24px mdi-google"></i>
-            </a>
+            <p class="text-center">
+              <span>Don’t have an account?</span>
+              <a href="signup.php"><span>Create one</span></a>
+            </p>
           </div>
         </div>
       </div>
-      <!-- /Login -->
-      <img src="assets/img/illustrations/tree-3.png" alt="auth-tree" class="authentication-image-object-left d-none d-lg-block">
-      <img src="assets/img/illustrations/auth-basic-mask-light.png" class="authentication-image d-none d-lg-block" alt="triangle-bg" data-app-light-img="illustrations/auth-basic-mask-light.png" data-app-dark-img="illustrations/auth-basic-mask-dark.html">
-      <img src="assets/img/illustrations/tree.png" alt="auth-tree" class="authentication-image-object-right d-none d-lg-block">
     </div>
   </div>
-</div>
-  
 
-  
-
-  <!-- Core JS -->
-  <!-- build:js assets/vendor/js/core.js -->
   <script src="assets/vendor/libs/jquery/jquery.js"></script>
-  <script src="assets/vendor/libs/popper/popper.js"></script>
   <script src="assets/vendor/js/bootstrap.js"></script>
   <script src="assets/vendor/libs/node-waves/node-waves.js"></script>
-  <script src="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-  <script src="assets/vendor/libs/hammer/hammer.js"></script>
-  <script src="assets/vendor/libs/i18n/i18n.js"></script>
-  <script src="assets/vendor/libs/typeahead-js/typeahead.js"></script>
   <script src="assets/vendor/js/menu.js"></script>
-  
-  <!-- endbuild -->
-
-  <!-- Vendors JS -->
-  <script src="assets/vendor/libs/%40form-validation/umd/bundle/popular.min.js"></script>
-<script src="assets/vendor/libs/%40form-validation/umd/plugin-bootstrap5/index.min.js"></script>
-<script src="assets/vendor/libs/%40form-validation/umd/plugin-auto-focus/index.min.js"></script>
-
-  <!-- Main JS -->
   <script src="assets/js/main.js"></script>
-  
-
-  <!-- Page JS -->
   <script src="assets/js/pages-auth.js"></script>
-  
 </body>
-
-
-<!-- Mirrored from demos.themeselection.com/materio-bootstrap-html-admin-template/html/vertical-menu-template/auth-login-basic.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 24 Sep 2023 05:41:25 GMT -->
 </html>
-
-<!-- beautify ignore:end -->
-

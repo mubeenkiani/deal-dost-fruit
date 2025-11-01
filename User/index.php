@@ -6,7 +6,7 @@ include 'connection.php';
 
 <head>
     <meta charset="utf-8">
-    <title>Fruitables - Vegetable Website Template</title>
+    <title>DealDost - Your Shopping Partner</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -26,7 +26,7 @@ include 'connection.php';
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 
-    <style>
+<style>
         .home-fruite-img {
             height: 200px !important;
             overflow: hidden;
@@ -69,7 +69,7 @@ include 'connection.php';
         .home-price-section .current-price {
             font-size: 1.1rem !important;
             font-weight: 700;
-            color: #81c408;
+            color: #000;
         }
 
         .home-price-section .original-price {
@@ -83,7 +83,7 @@ include 'connection.php';
             position: absolute;
             top: 10px;
             right: 10px;
-            background: #ff6b6b;
+            background: #000;
             color: white;
             padding: 0.2rem 0.5rem;
             border-radius: 20px;
@@ -111,10 +111,16 @@ include 'connection.php';
             padding-top: 3rem !important;
             padding-bottom: 3rem !important;
             margin-bottom: 2rem !important;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
         }
 
         .hero-content h1 {
-            margin-bottom: 2rem !important;
+            margin-bottom: 1.5rem !important;
+            color: #000;
+        }
+
+        .hero-content p {
+            color: #666;
         }
 
         .hero-search {
@@ -124,6 +130,12 @@ include 'connection.php';
 
         .hero-search .form-control {
             width: 75% !important;
+            border: 2px solid #000 !important;
+        }
+
+        .hero-search .btn {
+            background: #000 !important;
+            border-color: #000 !important;
         }
 
         @media (min-width: 992px) {
@@ -151,61 +163,81 @@ include 'connection.php';
         .hero-carousel .carousel-item img {
             height: 100%;
             object-fit: cover;
+            border-radius: 15px;
         }
 
+        /* Cart Popup Overlay */
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0);
+            z-index: 9998;
+            pointer-events: none;
+            transition: background 0.4s ease;
+        }
+
+        .cart-overlay.show {
+            background: rgba(0, 0, 0, 0.5);
+            pointer-events: auto;
+        }
+
+        /* Compact Cart Popup - Right Side */
         .cart-popup {
             position: fixed;
-            top: -100%;
-            right: 20px;
-            width: 420px;
-            max-height: 680px;
+            top: 0;
+            right: -100%;
+            width: 360px;
+            height: 100vh;
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            box-shadow: -4px 0 25px rgba(0, 0, 0, 0.2);
             z-index: 9999;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            border: 1px solid #e8e8e8;
         }
 
         .cart-popup.show {
-            top: 80px;
+            right: 0;
         }
 
         .cart-popup-header {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            color: #2c3e50;
-            padding: 20px 24px;
+            background: #000;
+            color: white;
+            padding: 16px 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #dee2e6;
+            border-bottom: 2px solid #333;
         }
 
         .cart-popup-header h5 {
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             margin: 0;
+            letter-spacing: 0.5px;
         }
 
         .cart-popup-header i {
-            color: #495057;
+            color: white;
+            font-size: 16px;
         }
 
         .cart-popup-close {
-            background: rgba(108, 117, 125, 0.1);
+            background: rgba(255, 255, 255, 0.1);
             border: none;
-            color: #495057;
-            width: 32px;
-            height: 32px;
+            color: white;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 20px;
+            font-size: 18px;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
@@ -213,60 +245,59 @@ include 'connection.php';
         }
 
         .cart-popup-close:hover {
-            background: rgba(108, 117, 125, 0.2);
+            background: rgba(255, 255, 255, 0.2);
             transform: rotate(90deg);
         }
 
         .cart-popup-body {
-            max-height: 400px;
+            max-height: calc(100vh - 200px);
             overflow-y: auto;
-            padding: 20px;
+            padding: 14px;
             flex: 1;
-            background: #fafafa;
+            background: #f8f9fa;
         }
 
         .cart-popup-body::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
 
         .cart-popup-body::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
+            background: #e9ecef;
+            border-radius: 3px;
         }
 
         .cart-popup-body::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 4px;
+            background: #000;
+            border-radius: 3px;
         }
 
         .cart-popup-body::-webkit-scrollbar-thumb:hover {
-            background: #a8a8a8;
+            background: #333;
         }
 
         .cart-item {
             display: flex;
-            gap: 14px;
-            padding: 16px;
+            gap: 10px;
+            padding: 10px;
             background: white;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            animation: slideIn 0.4s ease;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            animation: slideInRight 0.4s ease;
             position: relative;
-            border: 1px solid #e8e8e8;
+            border: 1px solid #e0e0e0;
             transition: all 0.3s ease;
         }
 
         .cart-item:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: #000;
         }
 
-        @keyframes slideIn {
+        @keyframes slideInRight {
             from {
                 opacity: 0;
                 transform: translateX(30px);
             }
-
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -274,12 +305,12 @@ include 'connection.php';
         }
 
         .cart-item-img {
-            width: 75px;
-            height: 75px;
+            width: 55px;
+            height: 55px;
             object-fit: cover;
-            border-radius: 10px;
+            border-radius: 6px;
             flex-shrink: 0;
-            border: 1px solid #e8e8e8;
+            border: 1px solid #e0e0e0;
         }
 
         .cart-item-details {
@@ -288,38 +319,38 @@ include 'connection.php';
         }
 
         .cart-item-name {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 600;
-            margin-bottom: 8px;
-            color: #2c3e50;
+            margin-bottom: 5px;
+            color: #000;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            padding-right: 30px;
+            padding-right: 22px;
         }
 
         .cart-item-price {
-            color: #495057;
+            color: #000;
             font-weight: 700;
-            font-size: 16px;
-            margin-bottom: 10px;
+            font-size: 13px;
+            margin-bottom: 6px;
         }
 
         .quantity-controls {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 5px;
         }
 
         .quantity-btn {
-            background: #6c757d;
+            background: #000;
             color: white;
             border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 8px;
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 13px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -330,46 +361,57 @@ include 'connection.php';
         }
 
         .quantity-btn:hover {
-            background: #495057;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
+            background: #333;
+            transform: scale(1.1);
         }
 
         .quantity-btn:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(108, 117, 125, 0.3);
+            transform: scale(0.95);
+        }
+
+        .btn-add-to-cart {
+            background: #000 !important;
+            color: white !important;
+            border: none !important;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add-to-cart:hover {
+            background: #333 !important;
+            transform: translateY(-2px);
         }
 
         .quantity-display {
-            min-width: 40px;
+            min-width: 28px;
             text-align: center;
             font-weight: 700;
-            font-size: 15px;
-            color: #2c3e50;
+            font-size: 12px;
+            color: #000;
             background: #f8f9fa;
-            padding: 6px 12px;
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
+            padding: 3px 6px;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
             transition: all 0.3s ease;
         }
 
         .quantity-display.updating {
-            background: #e9ecef;
-            transform: scale(1.1);
+            background: #000;
+            color: white;
+            transform: scale(1.15);
         }
 
         .cart-item-remove {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            background: #dc3545;
+            top: 6px;
+            right: 6px;
+            background: #000;
             color: white;
             border: none;
-            width: 26px;
-            height: 26px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 11px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -377,20 +419,17 @@ include 'connection.php';
             padding: 0;
             line-height: 1;
             font-weight: 600;
-            opacity: 0.9;
         }
 
         .cart-item-remove:hover {
-            background: #c82333;
+            background: #dc3545;
             transform: scale(1.15);
-            opacity: 1;
         }
 
         .cart-subtotal {
-            padding: 20px 24px;
+            padding: 14px 18px;
             background: white;
-            border-top: 2px solid #e9ecef;
-            border-bottom: 2px solid #e9ecef;
+            border-top: 2px solid #e0e0e0;
         }
 
         .cart-subtotal-row {
@@ -400,94 +439,98 @@ include 'connection.php';
         }
 
         .cart-subtotal-label {
-            font-size: 16px;
+            font-size: 13px;
             font-weight: 600;
-            color: #495057;
+            color: #666;
         }
 
         .cart-subtotal-amount {
-            font-size: 24px;
-            font-weight: 700;
-            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 800;
+            color: #000;
         }
 
         .cart-popup-footer {
-            padding: 20px 24px;
-            background: #f8f9fa;
+            padding: 14px 18px;
+            background: white;
             display: flex;
-            gap: 12px;
+            gap: 8px;
+            border-top: 1px solid #e0e0e0;
         }
 
         .cart-popup-footer button {
             flex: 1;
-            padding: 14px;
+            padding: 10px;
             border: none;
-            border-radius: 10px;
+            border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 14px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .btn-view-cart {
-            background: #2c3e50;
+            background: #000;
             color: white;
         }
 
         .btn-view-cart:hover {
-            background: #1a252f;
+            background: #333;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(44, 62, 80, 0.3);
         }
 
         .btn-view-cart:disabled {
-            opacity: 0.7;
+            opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
         }
 
         .btn-clear-cart {
             background: white;
-            color: #dc3545;
-            border: 2px solid #dc3545 !important;
+            color: #000;
+            border: 2px solid #000 !important;
         }
 
         .btn-clear-cart:hover {
-            background: #dc3545;
+            background: #000;
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(220, 53, 69, 0.3);
         }
 
         .empty-cart {
             text-align: center;
-            padding: 60px 20px;
-            color: #adb5bd;
+            padding: 50px 15px;
+            color: #999;
         }
 
         .empty-cart i {
-            font-size: 64px;
-            margin-bottom: 20px;
-            opacity: 0.4;
+            font-size: 50px;
+            margin-bottom: 15px;
+            opacity: 0.3;
         }
 
         .empty-cart p {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 500;
+            color: #666;
         }
 
         .cart-badge {
-            background: #dc3545;
+            background: #000;
             color: white;
             border-radius: 12px;
-            padding: 4px 10px;
-            font-size: 12px;
+            padding: 2px 7px;
+            font-size: 10px;
             font-weight: 700;
-            margin-left: 8px;
-            min-width: 24px;
+            margin-left: 6px;
+            min-width: 18px;
             display: inline-block;
             text-align: center;
         }
 
+        /* Toast Notification - Top Right */
         .toast-container {
             position: fixed;
             top: 20px;
@@ -500,15 +543,15 @@ include 'connection.php';
 
         .toast {
             background: white;
-            padding: 16px 20px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            padding: 14px 18px;
+            border-radius: 8px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
             display: flex;
             align-items: center;
-            gap: 12px;
-            min-width: 300px;
-            max-width: 400px;
-            animation: slideInRight 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            gap: 10px;
+            min-width: 280px;
+            max-width: 380px;
+            animation: slideInRight 0.4s ease;
             border-left: 4px solid #28a745;
         }
 
@@ -517,7 +560,7 @@ include 'connection.php';
         }
 
         .toast.info {
-            border-left-color: #17a2b8;
+            border-left-color: #000;
         }
 
         @keyframes slideInRight {
@@ -525,7 +568,6 @@ include 'connection.php';
                 opacity: 0;
                 transform: translateX(100%);
             }
-
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -544,13 +586,13 @@ include 'connection.php';
         }
 
         .toast-icon {
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 14px;
             flex-shrink: 0;
             background: #d4edda;
             color: #28a745;
@@ -562,8 +604,8 @@ include 'connection.php';
         }
 
         .toast.info .toast-icon {
-            background: #d1ecf1;
-            color: #17a2b8;
+            background: #e9ecef;
+            color: #000;
         }
 
         .toast-content {
@@ -572,27 +614,27 @@ include 'connection.php';
 
         .toast-title {
             font-weight: 700;
-            font-size: 14px;
-            color: #2c3e50;
-            margin-bottom: 4px;
+            font-size: 13px;
+            color: #000;
+            margin-bottom: 3px;
         }
 
         .toast-message {
-            font-size: 13px;
-            color: #6c757d;
+            font-size: 12px;
+            color: #666;
             line-height: 1.4;
         }
 
         .toast-close {
             background: transparent;
             border: none;
-            color: #adb5bd;
+            color: #999;
             cursor: pointer;
-            font-size: 20px;
+            font-size: 16px;
             line-height: 1;
             padding: 0;
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -603,7 +645,7 @@ include 'connection.php';
 
         .toast-close:hover {
             background: #f8f9fa;
-            color: #495057;
+            color: #000;
         }
 
         @media (max-width: 991px) {
@@ -633,7 +675,153 @@ include 'connection.php';
             }
         }
 
+        /* Mobile Cart Popup - Small Right Side */
         @media (max-width: 576px) {
+            .cart-popup {
+                width: 280px;
+                right: -280px;
+                max-height:50vh;
+            }
+
+            .cart-popup.show {
+                right: 0;
+            }
+
+            .cart-popup-header {
+                padding: 10px 12px;
+            }
+
+            .cart-popup-header h5 {
+                font-size: 12px;
+                gap: 6px;
+            }
+
+            .cart-popup-header i {
+                font-size: 13px;
+            }
+
+            .cart-popup-close {
+                width: 24px;
+                height: 24px;
+                font-size: 15px;
+            }
+
+            .cart-popup-body {
+                padding: 8px;
+                max-height: calc(75vh - 140px);
+            }
+
+            .cart-item {
+                padding: 6px;
+                gap: 6px;
+                margin-bottom: 8px;
+            }
+
+            .cart-item-img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .cart-item-name {
+                font-size: 10px;
+                margin-bottom: 3px;
+                padding-right: 18px;
+            }
+
+            .cart-item-price {
+                font-size: 11px;
+                margin-bottom: 4px;
+            }
+
+            .quantity-btn {
+                width: 18px;
+                height: 18px;
+                font-size: 10px;
+                border-radius: 3px;
+            }
+
+            .quantity-display {
+                min-width: 22px;
+                padding: 2px 4px;
+                font-size: 10px;
+            }
+
+            .cart-item-remove {
+                width: 16px;
+                height: 16px;
+                font-size: 9px;
+                top: 4px;
+                right: 4px;
+            }
+
+            .cart-subtotal {
+                padding: 8px 12px;
+            }
+
+            .cart-subtotal-label {
+                font-size: 11px;
+            }
+
+            .cart-subtotal-amount {
+                font-size: 14px;
+            }
+
+            .cart-popup-footer {
+                padding: 8px 12px;
+                gap: 6px;
+            }
+
+            .cart-popup-footer button {
+                padding: 7px;
+                font-size: 10px;
+            }
+
+            .empty-cart {
+                padding: 30px 10px;
+            }
+
+            .empty-cart i {
+                font-size: 35px;
+                margin-bottom: 10px;
+            }
+
+            .empty-cart p {
+                font-size: 12px;
+            }
+
+            .cart-badge {
+                padding: 2px 5px;
+                font-size: 9px;
+                margin-left: 4px;
+                min-width: 16px;
+            }
+
+            .toast {
+                min-width: 240px;
+                max-width: 260px;
+                padding: 10px 12px;
+            }
+
+            .toast-icon {
+                width: 24px;
+                height: 24px;
+                font-size: 12px;
+            }
+
+            .toast-title {
+                font-size: 11px;
+            }
+
+            .toast-message {
+                font-size: 10px;
+            }
+
+            .toast-close {
+                width: 20px;
+                height: 20px;
+                font-size: 14px;
+            }
+
             .hero-header {
                 padding-top: 1.5rem !important;
                 padding-bottom: 1.5rem !important;
@@ -692,20 +880,73 @@ include 'connection.php';
                 font-size: 0.65rem;
                 padding: 0.15rem 0.4rem;
             }
+        }
 
+        /* Extra Small Devices */
+        @media (max-width: 380px) {
             .cart-popup {
-                width: 95%;
-                right: 2.5%;
+                width: 260px;
+                right: -260px;
+            }
+
+            .cart-popup-header h5 {
+                font-size: 11px;
+            }
+
+            .cart-item-img {
+                width: 35px;
+                height: 35px;
+            }
+
+            .cart-item-name {
+                font-size: 9px;
+            }
+
+            .cart-item-price {
+                font-size: 10px;
             }
         }
 
+        /* Small Tablets */
         @media (min-width: 577px) and (max-width: 768px) {
+            .cart-popup {
+                width: 320px;
+                right: -320px;
+            }
+
+            .cart-popup.show {
+                right: 0;
+            }
+
+            .cart-popup-header {
+                padding: 12px 14px;
+            }
+
+            .cart-popup-body {
+                padding: 10px;
+            }
+
+            .cart-item-img {
+                width: 50px;
+                height: 50px;
+            }
+
             .home-fruite-img {
                 height: 180px !important;
             }
         }
 
+        /* Medium Tablets */
         @media (min-width: 769px) and (max-width: 992px) {
+            .cart-popup {
+                width: 340px;
+                right: -340px;
+            }
+
+            .cart-popup.show {
+                right: 0;
+            }
+
             .home-fruite-img {
                 height: 190px !important;
             }
@@ -714,6 +955,7 @@ include 'connection.php';
 </head>
 
 <body>
+    <div class="cart-overlay" id="cartOverlay" onclick="closeCartPopup()"></div>
     <div class="toast-container" id="toastContainer"></div>
 
     <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center">
@@ -726,10 +968,11 @@ include 'connection.php';
         <div class="container py-3">
             <div class="row g-4 align-items-center">
                 <div class="col-md-12 col-lg-5 hero-content">
-                    <h1 class="mb-3 display-3 text-primary">Organic Veggies & Fruits Foods</h1>
+                    <h1 class="mb-3 display-3">Welcome to DealDost</h1>
+                    <p class="fs-5 mb-4">Your Trusted Shopping Partner - Best Deals, Best Quality!</p>
                     <div class="hero-search">
-                        <input class="form-control border-2 border-secondary w-75 py-3 px-4 rounded-pill" type="text" placeholder="Search">
-                        <button type="submit" class="btn btn-primary border-2 border-secondary py-3 px-4 position-absolute rounded-pill text-white h-100" style="top: 0; right: 25%;">Submit Now</button>
+                        <input class="form-control border-2 border-secondary w-75 py-3 px-4 rounded-pill" type="text" placeholder="Search products...">
+                        <button type="submit" class="btn btn-primary border-2 border-secondary py-3 px-4 position-absolute rounded-pill text-white h-100" style="top: 0; right: 25%;">Search</button>
                     </div>
                 </div>
                 <div class="col-md-12 col-lg-7">
@@ -737,11 +980,11 @@ include 'connection.php';
                         <div class="carousel-inner" role="listbox">
                             <div class="carousel-item active rounded">
                                 <img src="img/hero-img-1.png" class="img-fluid w-100 bg-secondary rounded" alt="First slide">
-                                <a href="#" class="btn px-4 py-2 text-white rounded">Fruites</a>
+                                <a href="#" class="btn px-4 py-2 text-white rounded">Shop Now</a>
                             </div>
                             <div class="carousel-item rounded">
                                 <img src="img/hero-img-2.jpg" class="img-fluid w-100 rounded" alt="Second slide">
-                                <a href="#" class="btn px-4 py-2 text-white rounded">Vesitables</a>
+                                <a href="#" class="btn px-4 py-2 text-white rounded">Explore</a>
                             </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselId" data-bs-slide="prev">
@@ -763,7 +1006,8 @@ include 'connection.php';
             <div class="tab-class text-center">
                 <div class="row g-4">
                     <div class="col-lg-4 text-start">
-                        <h1>Our Organic Products</h1>
+                        <h1>Featured Products</h1>
+                        <p class="text-muted">Discover our best deals today</p>
                     </div>
                 </div>
 
@@ -801,7 +1045,7 @@ include 'connection.php';
                                     <div class="p-3 border border-secondary border-top-0 rounded-bottom d-flex flex-column justify-content-between flex-grow-1">
                                         <div>
                                             <h6 class="fw-semibold mb-2">' . $productName . '</h6>
-                                            <div class="product-description text-muted mb-3">
+                                            <div class="product-description text-muted mb-3" style="font-size: 0.8rem; line-height: 1.4;">
                                                 ' . $shortdes . '
                                             </div>
                                             <div class="home-rating-stars mb-2">
@@ -850,7 +1094,7 @@ include 'connection.php';
                             <img src="img/featur-1.jpg" class="img-fluid rounded-top w-100" alt="">
                             <div class="px-4 rounded-bottom">
                                 <div class="service-content bg-primary text-center p-4 rounded">
-                                    <h5 class="text-white">Fresh Apples</h5>
+                                    <h5 class="text-white">Fresh Products</h5>
                                     <h3 class="mb-0">20% OFF</h3>
                                 </div>
                             </div>
@@ -863,8 +1107,8 @@ include 'connection.php';
                             <img src="img/featur-2.jpg" class="img-fluid rounded-top w-100" alt="">
                             <div class="px-4 rounded-bottom">
                                 <div class="service-content bg-light text-center p-4 rounded">
-                                    <h5 class="text-primary">Tasty Fruits</h5>
-                                    <h3 class="mb-0">Free delivery</h3>
+                                    <h5 class="text-primary">Quality Items</h5>
+                                    <h3 class="mb-0">Free Delivery</h3>
                                 </div>
                             </div>
                         </div>
@@ -876,8 +1120,8 @@ include 'connection.php';
                             <img src="img/featur-3.jpg" class="img-fluid rounded-top w-100" alt="">
                             <div class="px-4 rounded-bottom">
                                 <div class="service-content bg-secondary text-center p-4 rounded">
-                                    <h5 class="text-white">Exotic Vegitable</h5>
-                                    <h3 class="mb-0">Discount 30$</h3>
+                                    <h5 class="text-white">Best Deals</h5>
+                                    <h3 class="mb-0">Discount 30%</h3>
                                 </div>
                             </div>
                         </div>
@@ -889,18 +1133,18 @@ include 'connection.php';
 
     <div class="container-fluid vesitable py-5">
         <div class="container py-5">
-            <h1 class="mb-0">Fresh Organic Vegetables</h1>
+            <h1 class="mb-0">Trending Products</h1>
             <div class="owl-carousel vegetable-carousel justify-content-center">
                 <div class="border border-primary rounded position-relative vesitable-item">
                     <div class="vesitable-img">
                         <img src="img/vegetable-item-6.jpg" class="img-fluid w-100 rounded-top" alt="">
                     </div>
-                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Vegetable</div>
+                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Product</div>
                     <div class="p-4 rounded-bottom">
-                        <h4>Parsely</h4>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
+                        <h4>Premium Item</h4>
+                        <p>High quality products at amazing prices for our valued customers</p>
                         <div class="d-flex justify-content-between flex-lg-wrap">
-                            <p class="text-dark fs-5 fw-bold mb-0">$4.99 / kg</p>
+                            <p class="text-dark fs-5 fw-bold mb-0">Rs 499 / unit</p>
                             <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
                         </div>
                     </div>
@@ -909,12 +1153,12 @@ include 'connection.php';
                     <div class="vesitable-img">
                         <img src="img/vegetable-item-1.jpg" class="img-fluid w-100 rounded-top" alt="">
                     </div>
-                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Vegetable</div>
+                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Product</div>
                     <div class="p-4 rounded-bottom">
-                        <h4>Parsely</h4>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
+                        <h4>Special Offer</h4>
+                        <p>Limited time deals on selected items at DealDost</p>
                         <div class="d-flex justify-content-between flex-lg-wrap">
-                            <p class="text-dark fs-5 fw-bold mb-0">$4.99 / kg</p>
+                            <p class="text-dark fs-5 fw-bold mb-0">Rs 399 / unit</p>
                             <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
                         </div>
                     </div>
@@ -923,12 +1167,12 @@ include 'connection.php';
                     <div class="vesitable-img">
                         <img src="img/vegetable-item-3.png" class="img-fluid w-100 rounded-top bg-light" alt="">
                     </div>
-                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Vegetable</div>
+                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Product</div>
                     <div class="p-4 rounded-bottom">
-                        <h4>Banana</h4>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
+                        <h4>Best Seller</h4>
+                        <p>Most popular products loved by our customers</p>
                         <div class="d-flex justify-content-between flex-lg-wrap">
-                            <p class="text-dark fs-5 fw-bold mb-0">$7.99 / kg</p>
+                            <p class="text-dark fs-5 fw-bold mb-0">Rs 799 / unit</p>
                             <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
                         </div>
                     </div>
@@ -937,12 +1181,12 @@ include 'connection.php';
                     <div class="vesitable-img">
                         <img src="img/vegetable-item-4.jpg" class="img-fluid w-100 rounded-top" alt="">
                     </div>
-                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Vegetable</div>
+                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Product</div>
                     <div class="p-4 rounded-bottom">
-                        <h4>Bell Papper</h4>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
+                        <h4>Featured Item</h4>
+                        <p>Exclusive products available only at DealDost</p>
                         <div class="d-flex justify-content-between flex-lg-wrap">
-                            <p class="text-dark fs-5 fw-bold mb-0">$7.99 / kg</p>
+                            <p class="text-dark fs-5 fw-bold mb-0">Rs 699 / unit</p>
                             <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
                         </div>
                     </div>
@@ -951,12 +1195,12 @@ include 'connection.php';
                     <div class="vesitable-img">
                         <img src="img/vegetable-item-5.jpg" class="img-fluid w-100 rounded-top" alt="">
                     </div>
-                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Vegetable</div>
+                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Product</div>
                     <div class="p-4 rounded-bottom">
-                        <h4>Potatoes</h4>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
+                        <h4>New Arrival</h4>
+                        <p>Latest products just added to our collection</p>
                         <div class="d-flex justify-content-between flex-lg-wrap">
-                            <p class="text-dark fs-5 fw-bold mb-0">$7.99 / kg</p>
+                            <p class="text-dark fs-5 fw-bold mb-0">Rs 599 / unit</p>
                             <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
                         </div>
                     </div>
@@ -965,12 +1209,12 @@ include 'connection.php';
                     <div class="vesitable-img">
                         <img src="img/vegetable-item-6.jpg" class="img-fluid w-100 rounded-top" alt="">
                     </div>
-                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Vegetable</div>
+                    <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Product</div>
                     <div class="p-4 rounded-bottom">
-                        <h4>Parsely</h4>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
+                        <h4>Top Rated</h4>
+                        <p>Highly rated products by verified buyers</p>
                         <div class="d-flex justify-content-between flex-lg-wrap">
-                            <p class="text-dark fs-5 fw-bold mb-0">$7.99 / kg</p>
+                            <p class="text-dark fs-5 fw-bold mb-0">Rs 899 / unit</p>
                             <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
                         </div>
                     </div>
@@ -984,10 +1228,10 @@ include 'connection.php';
             <div class="row g-4 align-items-center">
                 <div class="col-lg-6">
                     <div class="py-4">
-                        <h1 class="display-3 text-white">Fresh Exotic Fruits</h1>
-                        <p class="fw-normal display-3 text-dark mb-4">in Our Store</p>
-                        <p class="mb-4 text-dark">The generated Lorem Ipsum is therefore always free from repetition injected humour, or non-characteristic words etc.</p>
-                        <a href="#" class="banner-btn btn border-2 border-white rounded-pill text-dark py-3 px-5">BUY</a>
+                        <h1 class="display-3 text-white">Amazing Deals</h1>
+                        <p class="fw-normal display-3 text-dark mb-4">at DealDost</p>
+                        <p class="mb-4 text-dark">Shop the best products at unbeatable prices. Your satisfaction is our priority!</p>
+                        <a href="#" class="banner-btn btn border-2 border-white rounded-pill text-dark py-3 px-5">Shop Now</a>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -996,8 +1240,8 @@ include 'connection.php';
                         <div class="d-flex align-items-center justify-content-center bg-white rounded-circle position-absolute" style="width: 140px; height: 140px; top: 0; left: 0;">
                             <h1 style="font-size: 100px;">1</h1>
                             <div class="d-flex flex-column">
-                                <span class="h2 mb-0">50$</span>
-                                <span class="h4 text-muted mb-0">kg</span>
+                                <span class="h2 mb-0">50%</span>
+                                <span class="h4 text-muted mb-0">OFF</span>
                             </div>
                         </div>
                     </div>
@@ -1010,7 +1254,7 @@ include 'connection.php';
         <div class="container py-5">
             <div class="text-center mx-auto mb-5" style="max-width: 700px;">
                 <h1 class="display-4">Bestseller Products</h1>
-                <p>Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable.</p>
+                <p>Discover the most popular items loved by our customers at DealDost</p>
             </div>
             <div class="row g-4">
                 <div class="col-lg-6 col-xl-4">
@@ -1020,7 +1264,7 @@ include 'connection.php';
                                 <img src="img/best-product-1.jpg" class="img-fluid rounded-circle w-100" alt="">
                             </div>
                             <div class="col-6">
-                                <a href="#" class="h5">Organic Tomato</a>
+                                <a href="#" class="h5">Premium Product</a>
                                 <div class="d-flex my-3">
                                     <i class="fas fa-star text-primary"></i>
                                     <i class="fas fa-star text-primary"></i>
@@ -1028,7 +1272,7 @@ include 'connection.php';
                                     <i class="fas fa-star text-primary"></i>
                                     <i class="fas fa-star"></i>
                                 </div>
-                                <h4 class="mb-3">3.12 $</h4>
+                                <h4 class="mb-3">Rs 312</h4>
                                 <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
                             </div>
                         </div>
@@ -1041,7 +1285,7 @@ include 'connection.php';
                                 <img src="img/best-product-2.jpg" class="img-fluid rounded-circle w-100" alt="">
                             </div>
                             <div class="col-6">
-                                <a href="#" class="h5">Organic Tomato</a>
+                                <a href="#" class="h5">Quality Item</a>
                                 <div class="d-flex my-3">
                                     <i class="fas fa-star text-primary"></i>
                                     <i class="fas fa-star text-primary"></i>
@@ -1049,7 +1293,7 @@ include 'connection.php';
                                     <i class="fas fa-star text-primary"></i>
                                     <i class="fas fa-star"></i>
                                 </div>
-                                <h4 class="mb-3">3.12 $</h4>
+                                <h4 class="mb-3">Rs 412</h4>
                                 <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
                             </div>
                         </div>
@@ -1062,7 +1306,7 @@ include 'connection.php';
                                 <img src="img/best-product-3.jpg" class="img-fluid rounded-circle w-100" alt="">
                             </div>
                             <div class="col-6">
-                                <a href="#" class="h5">Organic Tomato</a>
+                                <a href="#" class="h5">Top Choice</a>
                                 <div class="d-flex my-3">
                                     <i class="fas fa-star text-primary"></i>
                                     <i class="fas fa-star text-primary"></i>
@@ -1070,7 +1314,7 @@ include 'connection.php';
                                     <i class="fas fa-star text-primary"></i>
                                     <i class="fas fa-star"></i>
                                 </div>
-                                <h4 class="mb-3">3.12 $</h4>
+                                <h4 class="mb-3">Rs 512</h4>
                                 <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
                             </div>
                         </div>
@@ -1087,51 +1331,48 @@ include 'connection.php';
                     <div class="col-md-6 col-lg-6 col-xl-3">
                         <div class="counter bg-white rounded p-5">
                             <i class="fa fa-users text-secondary"></i>
-                            <h4>satisfied customers</h4>
-                            <h1>1963</h1>
+                            <h4>Happy Customers</h4>
+                            <h1>5000+</h1>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-6 col-xl-3">
                         <div class="counter bg-white rounded p-5">
                             <i class="fa fa-users text-secondary"></i>
-                            <h4>quality of service</h4>
+                            <h4>Quality Service</h4>
                             <h1>99%</h1>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-6 col-xl-3">
                         <div class="counter bg-white rounded p-5">
                             <i class="fa fa-users text-secondary"></i>
-                            <h4>quality certificates</h4>
-                            <h1>33</h1>
+                            <h4>Products</h4>
+                            <h1>1000+</h1>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-6 col-xl-3">
                         <div class="counter bg-white rounded p-5">
                             <i class="fa fa-users text-secondary"></i>
-                            <h4>Available Products</h4>
-                            <h1>789</h1>
+                            <h4>Daily Orders</h4>
+                            <h1>500+</h1>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Fact Start -->
 
-
-    <!-- Tastimonial Start -->
     <div class="container-fluid testimonial py-5">
         <div class="container py-5">
             <div class="testimonial-header text-center">
-                <h4 class="text-primary">Our Testimonial</h4>
-                <h1 class="display-5 mb-5 text-dark">Our Client Saying!</h1>
+                <h4 class="text-primary">Customer Reviews</h4>
+                <h1 class="display-5 mb-5 text-dark">What Our Customers Say!</h1>
             </div>
             <div class="owl-carousel testimonial-carousel">
                 <div class="testimonial-item img-border-radius bg-light rounded p-4">
                     <div class="position-relative">
                         <i class="fa fa-quote-right fa-2x text-secondary position-absolute" style="bottom: 30px; right: 0;"></i>
                         <div class="mb-4 pb-4 border-bottom border-secondary">
-                            <p class="mb-0">Lorem Ipsum is simply dummy text of the printing Ipsum has been the industry's standard dummy text ever since the 1500s,
+                            <p class="mb-0">Amazing service and quality products! DealDost is my go-to shopping partner for all my needs.
                             </p>
                         </div>
                         <div class="d-flex align-items-center flex-nowrap">
@@ -1139,33 +1380,8 @@ include 'connection.php';
                                 <img src="img/testimonial-1.jpg" class="img-fluid rounded" style="width: 100px; height: 100px;" alt="">
                             </div>
                             <div class="ms-4 d-block">
-                                <h4 class="text-dark">Client Name</h4>
-                                <p class="m-0 pb-3">Profession</p>
-                                <div class="d-flex pe-5">
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star text-primary"></i>
-                                    <i class="fas fa-star"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-item img-border-radius bg-light rounded p-4">
-                    <div class="position-relative">
-                        <i class="fa fa-quote-right fa-2x text-secondary position-absolute" style="bottom: 30px; right: 0;"></i>
-                        <div class="mb-4 pb-4 border-bottom border-secondary">
-                            <p class="mb-0">Lorem Ipsum is simply dummy text of the printing Ipsum has been the industry's standard dummy text ever since the 1500s,
-                            </p>
-                        </div>
-                        <div class="d-flex align-items-center flex-nowrap">
-                            <div class="bg-secondary rounded">
-                                <img src="img/testimonial-1.jpg" class="img-fluid rounded" style="width: 100px; height: 100px;" alt="">
-                            </div>
-                            <div class="ms-4 d-block">
-                                <h4 class="text-dark">Client Name</h4>
-                                <p class="m-0 pb-3">Profession</p>
+                                <h4 class="text-dark">Ahmed Khan</h4>
+                                <p class="m-0 pb-3">Business Owner</p>
                                 <div class="d-flex pe-5">
                                     <i class="fas fa-star text-primary"></i>
                                     <i class="fas fa-star text-primary"></i>
@@ -1181,7 +1397,7 @@ include 'connection.php';
                     <div class="position-relative">
                         <i class="fa fa-quote-right fa-2x text-secondary position-absolute" style="bottom: 30px; right: 0;"></i>
                         <div class="mb-4 pb-4 border-bottom border-secondary">
-                            <p class="mb-0">Lorem Ipsum is simply dummy text of the printing Ipsum has been the industry's standard dummy text ever since the 1500s,
+                            <p class="mb-0">Best deals and fast delivery! Highly recommend DealDost for online shopping.
                             </p>
                         </div>
                         <div class="d-flex align-items-center flex-nowrap">
@@ -1189,8 +1405,33 @@ include 'connection.php';
                                 <img src="img/testimonial-1.jpg" class="img-fluid rounded" style="width: 100px; height: 100px;" alt="">
                             </div>
                             <div class="ms-4 d-block">
-                                <h4 class="text-dark">Client Name</h4>
-                                <p class="m-0 pb-3">Profession</p>
+                                <h4 class="text-dark">Fatima Ali</h4>
+                                <p class="m-0 pb-3">Teacher</p>
+                                <div class="d-flex pe-5">
+                                    <i class="fas fa-star text-primary"></i>
+                                    <i class="fas fa-star text-primary"></i>
+                                    <i class="fas fa-star text-primary"></i>
+                                    <i class="fas fa-star text-primary"></i>
+                                    <i class="fas fa-star text-primary"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-item img-border-radius bg-light rounded p-4">
+                    <div class="position-relative">
+                        <i class="fa fa-quote-right fa-2x text-secondary position-absolute" style="bottom: 30px; right: 0;"></i>
+                        <div class="mb-4 pb-4 border-bottom border-secondary">
+                            <p class="mb-0">Excellent customer service and genuine products. DealDost never disappoints!
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center flex-nowrap">
+                            <div class="bg-secondary rounded">
+                                <img src="img/testimonial-1.jpg" class="img-fluid rounded" style="width: 100px; height: 100px;" alt="">
+                            </div>
+                            <div class="ms-4 d-block">
+                                <h4 class="text-dark">Hassan Raza</h4>
+                                <p class="m-0 pb-3">Engineer</p>
                                 <div class="d-flex pe-5">
                                     <i class="fas fa-star text-primary"></i>
                                     <i class="fas fa-star text-primary"></i>
@@ -1205,23 +1446,20 @@ include 'connection.php';
             </div>
         </div>
     </div>
-    <!-- Tastimonial End -->
 
-
-    <!-- Footer Start -->
     <div class="container-fluid bg-dark text-white-50 footer pt-5 mt-5">
         <div class="container py-5">
             <div class="pb-4 mb-4" style="border-bottom: 1px solid rgba(226, 175, 24, 0.5) ;">
                 <div class="row g-4">
                     <div class="col-lg-3">
                         <a href="#">
-                            <h1 class="text-primary mb-0">Fruitables</h1>
-                            <p class="text-secondary mb-0">Fresh products</p>
+                            <h1 class="text-primary mb-0">DealDost</h1>
+                            <p class="text-secondary mb-0">Your Shopping Partner</p>
                         </a>
                     </div>
                     <div class="col-lg-6">
                         <div class="position-relative mx-auto">
-                            <input class="form-control border-0 w-100 py-3 px-4 rounded-pill" type="number" placeholder="Your Email">
+                            <input class="form-control border-0 w-100 py-3 px-4 rounded-pill" type="email" placeholder="Your Email">
                             <button type="submit" class="btn btn-primary border-0 border-secondary py-3 px-4 position-absolute rounded-pill text-white" style="top: 0; right: 0;">Subscribe Now</button>
                         </div>
                     </div>
@@ -1238,9 +1476,8 @@ include 'connection.php';
             <div class="row g-5">
                 <div class="col-lg-3 col-md-6">
                     <div class="footer-item">
-                        <h4 class="text-light mb-3">Why People Like us!</h4>
-                        <p class="mb-4">typesetting, remaining essentially unchanged. It was
-                            popularised in the 1960s with the like Aldus PageMaker including of Lorem Ipsum.</p>
+                        <h4 class="text-light mb-3">Why DealDost?</h4>
+                        <p class="mb-4">Your trusted shopping partner offering the best deals on quality products. Shop with confidence at DealDost!</p>
                         <a href="" class="btn border-secondary py-2 px-4 rounded-pill text-primary">Read More</a>
                     </div>
                 </div>
@@ -1259,19 +1496,19 @@ include 'connection.php';
                     <div class="d-flex flex-column text-start footer-item">
                         <h4 class="text-light mb-3">Account</h4>
                         <a class="btn-link" href="">My Account</a>
-                        <a class="btn-link" href="">Shop details</a>
+                        <a class="btn-link" href="">Shop Details</a>
                         <a class="btn-link" href="">Shopping Cart</a>
                         <a class="btn-link" href="">Wishlist</a>
                         <a class="btn-link" href="">Order History</a>
-                        <a class="btn-link" href="">International Orders</a>
+                        <a class="btn-link" href="">Track Order</a>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="footer-item">
                         <h4 class="text-light mb-3">Contact</h4>
-                        <p>Address: 1429 Netus Rd, NY 48247</p>
-                        <p>Email: Example@gmail.com</p>
-                        <p>Phone: +0123 4567 8910</p>
+                        <p>Address: Lahore, Punjab, Pakistan</p>
+                        <p>Email: info@dealdost.com</p>
+                        <p>Phone: +92 300 1234567</p>
                         <p>Payment Accepted</p>
                         <img src="img/payment.png" class="img-fluid" alt="">
                     </div>
@@ -1279,85 +1516,26 @@ include 'connection.php';
             </div>
         </div>
     </div>
-    <!-- Footer End -->
 
-    <!-- Copyright Start -->
     <div class="container-fluid copyright bg-dark py-4">
         <div class="container">
             <div class="row">
                 <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                    <span class="text-light"><a href="#"><i class="fas fa-copyright text-light me-2"></i>Your Site Name</a>, All right reserved.</span>
+                    <span class="text-light"><a href="#"><i class="fas fa-copyright text-light me-2"></i>DealDost</a>, All rights reserved.</span>
                 </div>
                 <div class="col-md-6 my-auto text-center text-md-end text-white">
-                    <!--/*** This template is free as long as you keep the below author’s credit link/attribution link/backlink. ***/-->
-                    <!--/*** If you'd like to use the template without the below author’s credit link/attribution link/backlink, ***/-->
-                    <!--/*** you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". ***/-->
-                    Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a> Distributed By <a class="border-bottom" href="https://themewagon.com">ThemeWagon</a>
+                    Designed with ❤️ for Pakistan
                 </div>
             </div>
         </div>
     </div>
-    <!-- Copyright End -->
 
-
-
-    <!-- Back to Top -->
     <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>
-
-    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-side-right modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="cartModalLabel">Shopping Cart</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Cart Item 1 -->
-                    <div class="cart-item d-flex justify-content-between align-items-center mb-3">
-                        <div class="cart-item-name">
-                            <p class="mb-0">Product Name 1</p>
-                            <p class="mb-0 text-muted">Price: $10.00</p>
-                        </div>
-                        <div class="cart-item-quantity d-flex align-items-center">
-                            <button class="btn btn-sm btn-secondary">-</button>
-                            <input type="number" class="form-control form-control-sm mx-2" value="1" min="1" style="width: 50px;">
-                            <button class="btn btn-sm btn-secondary">+</button>
-                        </div>
-                    </div>
-
-                    <!-- Cart Item 2 -->
-                    <div class="cart-item d-flex justify-content-between align-items-center mb-3">
-                        <div class="cart-item-name">
-                            <p class="mb-0">Product Name 2</p>
-                            <p class="mb-0 text-muted">Price: $20.00</p>
-                        </div>
-                        <div class="cart-item-quantity d-flex align-items-center">
-                            <button class="btn btn-sm btn-secondary">-</button>
-                            <input type="number" class="form-control form-control-sm mx-2" value="1" min="1" style="width: 50px;">
-                            <button class="btn btn-sm btn-secondary">+</button>
-                        </div>
-                    </div>
-                    <!-- Add more cart items as needed -->
-
-                    <div class="cart-total d-flex justify-content-between align-items-center mt-4">
-                        <p class="mb-0">Total:</p>
-                        <p class="mb-0">$30.00</p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Checkout</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
 
     <div class="cart-popup" id="cartPopup">
         <div class="cart-popup-header">
-            <h5 class="mb-0">
-                <i class="fa fa-shopping-cart me-2"></i>Shopping Cart
+            <h5>
+                <i class="fa fa-shopping-cart"></i>Shopping Cart
                 <span class="cart-badge" id="cartBadge">0</span>
             </h5>
             <button class="cart-popup-close" onclick="closeCartPopup()" title="Close Cart">
@@ -1378,200 +1556,269 @@ include 'connection.php';
         </div>
         <div class="cart-popup-footer">
             <button class="btn-view-cart" onclick="viewCart()">
-                <i class="fa fa-eye me-1"></i> View Cart
+                <i class="fa fa-eye"></i> View Cart
             </button>
             <button class="btn-clear-cart" onclick="clearCart()">
-                <i class="fa fa-trash me-1"></i> Clear All
+                <i class="fa fa-trash"></i> Clear
             </button>
         </div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"></script>
-
     <script src="lib/easing/easing.min.js"></script>
     <script src="lib/waypoints/waypoints.min.js"></script>
     <script src="lib/lightbox/js/lightbox.min.js"></script>
     <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-
-    <!-- Template Javascript -->
     <script src="js/main.js"></script>
+
+    <script>
+        let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+        function showToast(title, message, type = 'success') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+
+            const iconMap = {
+                success: 'fa-check',
+                error: 'fa-times',
+                info: 'fa-info'
+            };
+
+            toast.innerHTML = `
+                <div class="toast-icon">
+                    <i class="fa ${iconMap[type]}"></i>
+                </div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close" onclick="removeToast(this)">
+                    <i class="fa fa-times"></i>
+                </button>
+            `;
+
+            toastContainer.appendChild(toast);
+
+            setTimeout(() => {
+                removeToast(toast.querySelector('.toast-close'));
+            }, 3500);
+        }
+
+        function removeToast(button) {
+            const toast = button.closest('.toast');
+            if (toast) {
+                toast.classList.add('hiding');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }
+        }
+
+        function showCartPopup() {
+            const popup = document.getElementById('cartPopup');
+            const overlay = document.getElementById('cartOverlay');
+            popup.classList.add('show');
+            overlay.classList.add('show');
+            updateCartDisplay();
+        }
+
+        function closeCartPopup() {
+            const popup = document.getElementById('cartPopup');
+            const overlay = document.getElementById('cartOverlay');
+            popup.classList.remove('show');
+            overlay.classList.remove('show');
+        }
+
+        function updateCartDisplay() {
+            const cartBody = document.getElementById('cartPopupBody');
+            const cartBadge = document.getElementById('cartBadge');
+            const cartSubtotal = document.getElementById('cartSubtotal');
+            const subtotalAmount = document.getElementById('subtotalAmount');
+
+            const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+            cartBadge.textContent = totalItems;
+
+            if (cartItems.length === 0) {
+                cartBody.innerHTML = `
+                    <div class="empty-cart">
+                        <i class="fa fa-shopping-cart"></i>
+                        <p>Your cart is empty</p>
+                    </div>
+                `;
+                cartSubtotal.style.display = 'none';
+                return;
+            }
+
+            let subtotal = 0;
+
+            cartBody.innerHTML = cartItems.map((item, index) => {
+                const itemTotal = parseFloat(item.price) * item.quantity;
+                subtotal += itemTotal;
+
+                const imagePath = item.thumbnail.startsWith('http') ? item.thumbnail : `../Admin/${item.thumbnail}`;
+
+                return `
+                    <div class="cart-item">
+                        <img src="${imagePath}" alt="${item.name}" class="cart-item-img" onerror="this.src='https://via.placeholder.com/55x55?text=No+Image'">
+                        <div class="cart-item-details">
+                            <div class="cart-item-name" title="${item.name}">${item.name}</div>
+                            <div class="cart-item-price">Rs ${itemTotal.toFixed(2)}</div>
+                            <div class="quantity-controls">
+                                <button class="quantity-btn" onclick="event.stopPropagation(); decreaseQuantity(${index});" title="Decrease">
+                                    −
+                                </button>
+                                <span class="quantity-display" id="qty-${index}">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="event.stopPropagation(); increaseQuantity(${index});" title="Increase">
+                                    +
+                                </button>
+                            </div>
+                        </div>
+                        <button class="cart-item-remove" onclick="event.stopPropagation(); removeFromCart(${index});" title="Remove">
+                            &times;
+                        </button>
+                    </div>
+                `;
+            }).join('');
+
+            cartSubtotal.style.display = 'block';
+            subtotalAmount.textContent = `Rs ${subtotal.toFixed(2)}`;
+        }
+
+        function addToCart(productId, name, price, thumbnail) {
+            const existingIndex = cartItems.findIndex(i => i.id === productId);
+
+            if (existingIndex > -1) {
+                cartItems[existingIndex].quantity++;
+                showToast('Updated!', `${name} quantity increased`, 'success');
+            } else {
+                const item = {
+                    id: productId,
+                    name: name,
+                    price: price,
+                    thumbnail: thumbnail,
+                    quantity: 1
+                };
+                cartItems.push(item);
+                showToast('Added to Cart!', `${name} added successfully`, 'success');
+            }
+
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            showCartPopup();
+        }
+
+        function increaseQuantity(index) {
+            cartItems[index].quantity++;
+
+            const qtyDisplay = document.getElementById(`qty-${index}`);
+            const priceDisplay = qtyDisplay.closest('.cart-item-details').querySelector('.cart-item-price');
+
+            if (qtyDisplay && priceDisplay) {
+                qtyDisplay.classList.add('updating');
+                qtyDisplay.textContent = cartItems[index].quantity;
+
+                const itemTotal = parseFloat(cartItems[index].price) * cartItems[index].quantity;
+                priceDisplay.textContent = `Rs ${itemTotal.toFixed(2)}`;
+
+                setTimeout(() => {
+                    qtyDisplay.classList.remove('updating');
+                }, 300);
+            }
+
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            updateSubtotalAndBadge();
+        }
+
+        function decreaseQuantity(index) {
+            if (cartItems[index].quantity > 1) {
+                cartItems[index].quantity--;
+
+                const qtyDisplay = document.getElementById(`qty-${index}`);
+                const priceDisplay = qtyDisplay.closest('.cart-item-details').querySelector('.cart-item-price');
+
+                if (qtyDisplay && priceDisplay) {
+                    qtyDisplay.classList.add('updating');
+                    qtyDisplay.textContent = cartItems[index].quantity;
+
+                    const itemTotal = parseFloat(cartItems[index].price) * cartItems[index].quantity;
+                    priceDisplay.textContent = `Rs ${itemTotal.toFixed(2)}`;
+
+                    setTimeout(() => {
+                        qtyDisplay.classList.remove('updating');
+                    }, 300);
+                }
+
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                updateSubtotalAndBadge();
+            } else {
+                removeFromCart(index);
+            }
+        }
+
+        function updateSubtotalAndBadge() {
+            const cartBadge = document.getElementById('cartBadge');
+            const subtotalAmount = document.getElementById('subtotalAmount');
+
+            const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+            cartBadge.textContent = totalItems;
+
+            const subtotal = cartItems.reduce((sum, item) => sum + (parseFloat(item.price) * item.quantity), 0);
+            subtotalAmount.textContent = `Rs ${subtotal.toFixed(2)}`;
+        }
+
+        function removeFromCart(index) {
+            const itemName = cartItems[index].name;
+            cartItems.splice(index, 1);
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            updateCartDisplay();
+            showToast('Item Removed', `${itemName} removed from cart`, 'info');
+        }
+
+        function clearCart() {
+            if (confirm('Clear all items from cart?')) {
+                const itemCount = cartItems.length;
+                cartItems = [];
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                updateCartDisplay();
+                showToast('Cart Cleared', `${itemCount} item(s) removed`, 'info');
+            }
+        }
+
+        function viewCart() {
+            const viewCartBtn = document.querySelector('.btn-view-cart');
+            const originalContent = viewCartBtn.innerHTML;
+            viewCartBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Loading...';
+            viewCartBtn.disabled = true;
+
+            setTimeout(() => {
+                window.location.href = 'cart.php';
+            }, 600);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartDisplay();
+        });
+
+        document.getElementById('cartPopup')?.addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            function loadProducts() {
+                $.ajax({
+                    url: 'fetch_products.php',
+                    method: 'GET',
+                    success: function(response) {
+                        $('#product-container').html(response);
+                    }
+                });
+            }
+            loadProducts();
+        });
+    </script>
 </body>
 
 </html>
-
-<div id="product-container" class="row"></div>
-<script>
-    let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-
-    function showCartPopup() {
-        const popup = document.getElementById('cartPopup');
-        popup.classList.add('show');
-        updateCartDisplay();
-    }
-
-    function closeCartPopup() {
-        const popup = document.getElementById('cartPopup');
-        popup.classList.remove('show');
-    }
-
-    function updateCartDisplay() {
-        const cartBody = document.getElementById('cartPopupBody');
-        const cartBadge = document.getElementById('cartBadge');
-        const cartSubtotal = document.getElementById('cartSubtotal');
-        const subtotalAmount = document.getElementById('subtotalAmount');
-
-        // Update cart badge
-        const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-        cartBadge.textContent = totalItems;
-
-        if (cartItems.length === 0) {
-            cartBody.innerHTML = `
-            <div class="empty-cart">
-                <i class="fa fa-shopping-cart"></i>
-                <p>Your cart is empty</p>
-            </div>
-        `;
-            cartSubtotal.style.display = 'none';
-            return;
-        }
-
-        // Calculate subtotal
-        let subtotal = 0;
-
-        cartBody.innerHTML = cartItems.map((item, index) => {
-            const itemTotal = parseFloat(item.price) * item.quantity;
-            subtotal += itemTotal;
-
-            return `
-            <div class="cart-item">
-                <img src="../Admin/${item.thumbnail}" alt="${item.name}" class="cart-item-img">
-                <div class="cart-item-details">
-                    <div class="cart-item-name" title="${item.name}">${item.name}</div>
-                    <div class="cart-item-price">Rs ${itemTotal.toFixed(2)}</div>
-                    <div class="quantity-controls">
-                        <button class="quantity-btn" onclick="event.stopPropagation(); decreaseQuantity(${index});" title="Decrease quantity">
-                            −
-                        </button>
-                        <span class="quantity-display">${item.quantity}</span>
-                        <button class="quantity-btn" onclick="event.stopPropagation(); increaseQuantity(${index});" title="Increase quantity">
-                            +
-                        </button>
-                    </div>
-                </div>
-                <button class="cart-item-remove" onclick="event.stopPropagation(); removeFromCart(${index});" title="Remove item">
-                    &times;
-                </button>
-            </div>
-        `;
-        }).join('');
-
-        // Show and update subtotal
-        cartSubtotal.style.display = 'block';
-        subtotalAmount.textContent = `Rs ${subtotal.toFixed(2)}`;
-    }
-
-    function addToCart(productId, name, price, thumbnail) {
-        // Check if item already exists
-        const existingIndex = cartItems.findIndex(i => i.id === productId);
-
-        if (existingIndex > -1) {
-            // Increment quantity if item exists
-            cartItems[existingIndex].quantity++;
-        } else {
-            // Add new item
-            const item = {
-                id: productId,
-                name: name,
-                price: price,
-                thumbnail: thumbnail,
-                quantity: 1
-            };
-            cartItems.push(item);
-        }
-
-        localStorage.setItem('cartItems', JSON.stringify(cartItems));
-        showCartPopup();
-    }
-
-    function increaseQuantity(index) {
-        cartItems[index].quantity++;
-        localStorage.setItem('cartItems', JSON.stringify(cartItems));
-        updateCartDisplay();
-    }
-
-    function decreaseQuantity(index) {
-        if (cartItems[index].quantity > 1) {
-            cartItems[index].quantity--;
-            localStorage.setItem('cartItems', JSON.stringify(cartItems));
-            updateCartDisplay();
-        } else {
-            // If quantity is 1, remove the item but keep popup open
-            removeFromCart(index);
-        }
-    }
-
-    function removeFromCart(index) {
-        // Remove item from cart
-        cartItems.splice(index, 1);
-        localStorage.setItem('cartItems', JSON.stringify(cartItems));
-        updateCartDisplay();
-        // POPUP STAYS OPEN - no auto-close
-    }
-
-    function clearCart() {
-        if (confirm('Are you sure you want to clear the entire cart?')) {
-            cartItems = [];
-            localStorage.setItem('cartItems', JSON.stringify(cartItems));
-            updateCartDisplay();
-            // POPUP STAYS OPEN - user can close manually
-        }
-    }
-
-    function viewCart() {
-        window.location.href = 'cart.php';
-    }
-
-    // Load cart on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        updateCartDisplay();
-    });
-
-    // Prevent popup from closing when clicking inside it
-    document.getElementById('cartPopup')?.addEventListener('click', function(event) {
-        event.stopPropagation();
-    });
-
-    // Close popup only when clicking outside
-    document.addEventListener('click', function(event) {
-        const popup = document.getElementById('cartPopup');
-        const target = event.target;
-
-        // Only close if clicking outside popup AND not on add to cart button
-        if (popup && popup.classList.contains('show')) {
-            if (!popup.contains(target) && !target.closest('.btn-add-to-cart')) {
-                closeCartPopup();
-            }
-        }
-    });
-</script>
-
-<script>
-    $(document).ready(function() {
-        function loadProducts() {
-            $.ajax({
-                url: 'fetch_products.php',
-                method: 'GET',
-                success: function(response) {
-                    $('#product-container').html(response);
-                }
-            });
-        }
-        loadProducts();
-    });
-</script>

@@ -7,7 +7,7 @@ include 'connection.php';
 
 <head>
     <meta charset="utf-8">
-    <title>Fruitables - Vegetable Website Template</title>
+    <title>Shop - DealDost</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -21,6 +21,8 @@ include 'connection.php';
 
     <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
@@ -68,7 +70,7 @@ include 'connection.php';
         .price-section .current-price {
             font-size: 1.1rem !important;
             font-weight: 700;
-            color: #81c408;
+            color: #000;
         }
 
         .price-section .original-price {
@@ -82,7 +84,7 @@ include 'connection.php';
             position: absolute;
             top: 10px;
             right: 10px;
-            background: #ff6b6b;
+            background: #000;
             color: white;
             padding: 0.2rem 0.5rem;
             border-radius: 20px;
@@ -106,6 +108,18 @@ include 'connection.php';
             white-space: nowrap;
         }
 
+        .btn-add-to-cart {
+            background: #000 !important;
+            color: white !important;
+            border: none !important;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add-to-cart:hover {
+            background: #333 !important;
+            transform: translateY(-2px);
+        }
+
         .pagination a {
             color: black;
             padding: 8px 16px;
@@ -116,9 +130,9 @@ include 'connection.php';
         }
 
         .pagination a.active {
-            background-color: #4CAF50;
+            background-color: #000;
             color: white;
-            border: 1px solid #4CAF50;
+            border: 1px solid #000;
         }
 
         .pagination a:hover:not(.active):not(.disabled) {
@@ -133,59 +147,78 @@ include 'connection.php';
             transition: opacity 0.3s ease;
         }
 
+        /* Cart Popup Overlay */
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0);
+            z-index: 9998;
+            pointer-events: none;
+            transition: background 0.4s ease;
+        }
+
+        .cart-overlay.show {
+            background: rgba(0, 0, 0, 0.5);
+            pointer-events: auto;
+        }
+
+        /* Compact Cart Popup - Right Side */
         .cart-popup {
             position: fixed;
-            top: -100%;
-            right: 20px;
-            width: 420px;
-            max-height: 680px;
+            top: 0;
+            right: -100%;
+            width: 360px;
+            height: 100vh;
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            box-shadow: -4px 0 25px rgba(0, 0, 0, 0.2);
             z-index: 9999;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            border: 1px solid #e8e8e8;
         }
 
         .cart-popup.show {
-            top: 80px;
+            right: 0;
         }
 
         .cart-popup-header {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            color: #2c3e50;
-            padding: 20px 24px;
+            background: #000;
+            color: white;
+            padding: 16px 18px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #dee2e6;
+            border-bottom: 2px solid #333;
         }
 
         .cart-popup-header h5 {
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             margin: 0;
+            letter-spacing: 0.5px;
         }
 
         .cart-popup-header i {
-            color: #495057;
+            color: white;
+            font-size: 16px;
         }
 
         .cart-popup-close {
-            background: rgba(108, 117, 125, 0.1);
+            background: rgba(255, 255, 255, 0.1);
             border: none;
-            color: #495057;
-            width: 32px;
-            height: 32px;
+            color: white;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 20px;
+            font-size: 18px;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
@@ -193,60 +226,59 @@ include 'connection.php';
         }
 
         .cart-popup-close:hover {
-            background: rgba(108, 117, 125, 0.2);
+            background: rgba(255, 255, 255, 0.2);
             transform: rotate(90deg);
         }
 
         .cart-popup-body {
-            max-height: 400px;
+            max-height: calc(100vh - 200px);
             overflow-y: auto;
-            padding: 20px;
+            padding: 14px;
             flex: 1;
-            background: #fafafa;
+            background: #f8f9fa;
         }
 
         .cart-popup-body::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
 
         .cart-popup-body::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
+            background: #e9ecef;
+            border-radius: 3px;
         }
 
         .cart-popup-body::-webkit-scrollbar-thumb {
-            background: #c1c1c1;
-            border-radius: 4px;
+            background: #000;
+            border-radius: 3px;
         }
 
         .cart-popup-body::-webkit-scrollbar-thumb:hover {
-            background: #a8a8a8;
+            background: #333;
         }
 
         .cart-item {
             display: flex;
-            gap: 14px;
-            padding: 16px;
+            gap: 10px;
+            padding: 10px;
             background: white;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            animation: slideIn 0.4s ease;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            animation: slideInRight 0.4s ease;
             position: relative;
-            border: 1px solid #e8e8e8;
+            border: 1px solid #e0e0e0;
             transition: all 0.3s ease;
         }
 
         .cart-item:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: #000;
         }
 
-        @keyframes slideIn {
+        @keyframes slideInRight {
             from {
                 opacity: 0;
                 transform: translateX(30px);
             }
-
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -254,12 +286,12 @@ include 'connection.php';
         }
 
         .cart-item-img {
-            width: 75px;
-            height: 75px;
+            width: 55px;
+            height: 55px;
             object-fit: cover;
-            border-radius: 10px;
+            border-radius: 6px;
             flex-shrink: 0;
-            border: 1px solid #e8e8e8;
+            border: 1px solid #e0e0e0;
         }
 
         .cart-item-details {
@@ -268,38 +300,38 @@ include 'connection.php';
         }
 
         .cart-item-name {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 600;
-            margin-bottom: 8px;
-            color: #2c3e50;
+            margin-bottom: 5px;
+            color: #000;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            padding-right: 30px;
+            padding-right: 22px;
         }
 
         .cart-item-price {
-            color: #495057;
+            color: #000;
             font-weight: 700;
-            font-size: 16px;
-            margin-bottom: 10px;
+            font-size: 13px;
+            margin-bottom: 6px;
         }
 
         .quantity-controls {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 5px;
         }
 
         .quantity-btn {
-            background: #6c757d;
+            background: #000;
             color: white;
             border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 8px;
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 13px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -310,46 +342,45 @@ include 'connection.php';
         }
 
         .quantity-btn:hover {
-            background: #495057;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
+            background: #333;
+            transform: scale(1.1);
         }
 
         .quantity-btn:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(108, 117, 125, 0.3);
+            transform: scale(0.95);
         }
 
         .quantity-display {
-            min-width: 40px;
+            min-width: 28px;
             text-align: center;
             font-weight: 700;
-            font-size: 15px;
-            color: #2c3e50;
+            font-size: 12px;
+            color: #000;
             background: #f8f9fa;
-            padding: 6px 12px;
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
+            padding: 3px 6px;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
             transition: all 0.3s ease;
         }
 
         .quantity-display.updating {
-            background: #e9ecef;
-            transform: scale(1.1);
+            background: #000;
+            color: white;
+            transform: scale(1.15);
         }
 
         .cart-item-remove {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            background: #dc3545;
+            top: 6px;
+            right: 6px;
+            background: #000;
             color: white;
             border: none;
-            width: 26px;
-            height: 26px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 11px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -357,20 +388,17 @@ include 'connection.php';
             padding: 0;
             line-height: 1;
             font-weight: 600;
-            opacity: 0.9;
         }
 
         .cart-item-remove:hover {
-            background: #c82333;
+            background: #dc3545;
             transform: scale(1.15);
-            opacity: 1;
         }
 
         .cart-subtotal {
-            padding: 20px 24px;
+            padding: 14px 18px;
             background: white;
-            border-top: 2px solid #e9ecef;
-            border-bottom: 2px solid #e9ecef;
+            border-top: 2px solid #e0e0e0;
         }
 
         .cart-subtotal-row {
@@ -380,94 +408,98 @@ include 'connection.php';
         }
 
         .cart-subtotal-label {
-            font-size: 16px;
+            font-size: 13px;
             font-weight: 600;
-            color: #495057;
+            color: #666;
         }
 
         .cart-subtotal-amount {
-            font-size: 24px;
-            font-weight: 700;
-            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 800;
+            color: #000;
         }
 
         .cart-popup-footer {
-            padding: 20px 24px;
-            background: #f8f9fa;
+            padding: 14px 18px;
+            background: white;
             display: flex;
-            gap: 12px;
+            gap: 8px;
+            border-top: 1px solid #e0e0e0;
         }
 
         .cart-popup-footer button {
             flex: 1;
-            padding: 14px;
+            padding: 10px;
             border: none;
-            border-radius: 10px;
+            border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 14px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .btn-view-cart {
-            background: #2c3e50;
+            background: #000;
             color: white;
         }
 
         .btn-view-cart:hover {
-            background: #1a252f;
+            background: #333;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(44, 62, 80, 0.3);
         }
 
         .btn-view-cart:disabled {
-            opacity: 0.7;
+            opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
         }
 
         .btn-clear-cart {
             background: white;
-            color: #dc3545;
-            border: 2px solid #dc3545 !important;
+            color: #000;
+            border: 2px solid #000 !important;
         }
 
         .btn-clear-cart:hover {
-            background: #dc3545;
+            background: #000;
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(220, 53, 69, 0.3);
         }
 
         .empty-cart {
             text-align: center;
-            padding: 60px 20px;
-            color: #adb5bd;
+            padding: 50px 15px;
+            color: #999;
         }
 
         .empty-cart i {
-            font-size: 64px;
-            margin-bottom: 20px;
-            opacity: 0.4;
+            font-size: 50px;
+            margin-bottom: 15px;
+            opacity: 0.3;
         }
 
         .empty-cart p {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 500;
+            color: #666;
         }
 
         .cart-badge {
-            background: #dc3545;
+            background: #000;
             color: white;
             border-radius: 12px;
-            padding: 4px 10px;
-            font-size: 12px;
+            padding: 2px 7px;
+            font-size: 10px;
             font-weight: 700;
-            margin-left: 8px;
-            min-width: 24px;
+            margin-left: 6px;
+            min-width: 18px;
             display: inline-block;
             text-align: center;
         }
 
+        /* Toast Notification - Top Right */
         .toast-container {
             position: fixed;
             top: 20px;
@@ -480,15 +512,15 @@ include 'connection.php';
 
         .toast {
             background: white;
-            padding: 16px 20px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            padding: 14px 18px;
+            border-radius: 8px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
             display: flex;
             align-items: center;
-            gap: 12px;
-            min-width: 300px;
-            max-width: 400px;
-            animation: slideInRight 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            gap: 10px;
+            min-width: 280px;
+            max-width: 380px;
+            animation: slideInRight 0.4s ease;
             border-left: 4px solid #28a745;
         }
 
@@ -497,7 +529,7 @@ include 'connection.php';
         }
 
         .toast.info {
-            border-left-color: #17a2b8;
+            border-left-color: #000;
         }
 
         @keyframes slideInRight {
@@ -505,7 +537,6 @@ include 'connection.php';
                 opacity: 0;
                 transform: translateX(100%);
             }
-
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -524,13 +555,13 @@ include 'connection.php';
         }
 
         .toast-icon {
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 14px;
             flex-shrink: 0;
             background: #d4edda;
             color: #28a745;
@@ -542,8 +573,8 @@ include 'connection.php';
         }
 
         .toast.info .toast-icon {
-            background: #d1ecf1;
-            color: #17a2b8;
+            background: #e9ecef;
+            color: #000;
         }
 
         .toast-content {
@@ -552,27 +583,27 @@ include 'connection.php';
 
         .toast-title {
             font-weight: 700;
-            font-size: 14px;
-            color: #2c3e50;
-            margin-bottom: 4px;
+            font-size: 13px;
+            color: #000;
+            margin-bottom: 3px;
         }
 
         .toast-message {
-            font-size: 13px;
-            color: #6c757d;
+            font-size: 12px;
+            color: #666;
             line-height: 1.4;
         }
 
         .toast-close {
             background: transparent;
             border: none;
-            color: #adb5bd;
+            color: #999;
             cursor: pointer;
-            font-size: 20px;
+            font-size: 16px;
             line-height: 1;
             padding: 0;
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -583,10 +614,155 @@ include 'connection.php';
 
         .toast-close:hover {
             background: #f8f9fa;
-            color: #495057;
+            color: #000;
         }
 
+        /* Mobile Cart Popup - Small Right Side */
         @media (max-width: 576px) {
+            .cart-popup {
+                width: 280px;
+                right: -280px;
+            }
+
+            .cart-popup.show {
+                right: 0;
+            }
+
+            .cart-popup-header {
+                padding: 10px 12px;
+            }
+
+            .cart-popup-header h5 {
+                font-size: 12px;
+                gap: 6px;
+            }
+
+            .cart-popup-header i {
+                font-size: 13px;
+            }
+
+            .cart-popup-close {
+                width: 24px;
+                height: 24px;
+                font-size: 15px;
+            }
+
+            .cart-popup-body {
+                padding: 8px;
+                max-height: calc(75vh - 140px);
+            }
+
+            .cart-item {
+                padding: 6px;
+                gap: 6px;
+                margin-bottom: 8px;
+            }
+
+            .cart-item-img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .cart-item-name {
+                font-size: 10px;
+                margin-bottom: 3px;
+                padding-right: 18px;
+            }
+
+            .cart-item-price {
+                font-size: 11px;
+                margin-bottom: 4px;
+            }
+
+            .quantity-btn {
+                width: 18px;
+                height: 18px;
+                font-size: 10px;
+                border-radius: 3px;
+            }
+
+            .quantity-display {
+                min-width: 22px;
+                padding: 2px 4px;
+                font-size: 10px;
+            }
+
+            .cart-item-remove {
+                width: 16px;
+                height: 16px;
+                font-size: 9px;
+                top: 4px;
+                right: 4px;
+            }
+
+            .cart-subtotal {
+                padding: 8px 12px;
+            }
+
+            .cart-subtotal-label {
+                font-size: 11px;
+            }
+
+            .cart-subtotal-amount {
+                font-size: 14px;
+            }
+
+            .cart-popup-footer {
+                padding: 8px 12px;
+                gap: 6px;
+            }
+
+            .cart-popup-footer button {
+                padding: 7px;
+                font-size: 10px;
+            }
+
+            .empty-cart {
+                padding: 30px 10px;
+            }
+
+            .empty-cart i {
+                font-size: 35px;
+                margin-bottom: 10px;
+            }
+
+            .empty-cart p {
+                font-size: 12px;
+            }
+
+            .cart-badge {
+                padding: 2px 5px;
+                font-size: 9px;
+                margin-left: 4px;
+                min-width: 16px;
+            }
+
+            .toast {
+                min-width: 240px;
+                max-width: 260px;
+                padding: 10px 12px;
+            }
+
+            .toast-icon {
+                width: 24px;
+                height: 24px;
+                font-size: 12px;
+            }
+
+            .toast-title {
+                font-size: 11px;
+            }
+
+            .toast-message {
+                font-size: 10px;
+            }
+
+            .toast-close {
+                width: 20px;
+                height: 20px;
+                font-size: 14px;
+            }
+
             .fruite-img {
                 height: 160px !important;
             }
@@ -620,20 +796,73 @@ include 'connection.php';
                 font-size: 0.65rem;
                 padding: 0.15rem 0.4rem;
             }
+        }
 
+        /* Extra Small Devices */
+        @media (max-width: 380px) {
             .cart-popup {
-                width: 95%;
-                right: 2.5%;
+                width: 260px;
+                right: -260px;
+            }
+
+            .cart-popup-header h5 {
+                font-size: 11px;
+            }
+
+            .cart-item-img {
+                width: 35px;
+                height: 35px;
+            }
+
+            .cart-item-name {
+                font-size: 9px;
+            }
+
+            .cart-item-price {
+                font-size: 10px;
             }
         }
 
+        /* Small Tablets */
         @media (min-width: 577px) and (max-width: 768px) {
+            .cart-popup {
+                width: 320px;
+                right: -320px;
+            }
+
+            .cart-popup.show {
+                right: 0;
+            }
+
+            .cart-popup-header {
+                padding: 12px 14px;
+            }
+
+            .cart-popup-body {
+                padding: 10px;
+            }
+
+            .cart-item-img {
+                width: 50px;
+                height: 50px;
+            }
+
             .fruite-img {
                 height: 180px !important;
             }
         }
 
+        /* Medium Tablets */
         @media (min-width: 769px) and (max-width: 992px) {
+            .cart-popup {
+                width: 340px;
+                right: -340px;
+            }
+
+            .cart-popup.show {
+                right: 0;
+            }
+
             .fruite-img {
                 height: 190px !important;
             }
@@ -642,9 +871,10 @@ include 'connection.php';
 </head>
 
 <body>
+    <div class="cart-overlay" id="cartOverlay" onclick="closeCartPopup()"></div>
     <div class="toast-container" id="toastContainer"></div>
 
-    <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
+    <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-grow text-primary" role="status"></div>
     </div>
 
@@ -670,7 +900,7 @@ include 'connection.php';
     <div class="container-fluid page-header py-5">
         <h1 class="text-center text-white display-6">Shop</h1>
         <ol class="breadcrumb justify-content-center mb-0">
-            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item"><a href="index.php">Home</a></li>
             <li class="breadcrumb-item"><a href="#">Pages</a></li>
             <li class="breadcrumb-item active text-white">Shop</li>
         </ol>
@@ -678,20 +908,20 @@ include 'connection.php';
 
     <div class="container-fluid fruite py-5">
         <div class="container py-5">
-            <h1 class="mb-4">Fresh fruits shop</h1>
+            <h1 class="mb-4">Shop Our Products</h1>
             <div class="row g-4">
                 <div class="col-lg-12">
                     <div class="row g-4">
                         <div class="col-xl-3">
                             <div class="input-group w-100 mx-auto d-flex">
-                                <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
+                                <input type="search" class="form-control p-3" placeholder="Search products..." aria-describedby="search-icon-1">
                                 <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
                             </div>
                         </div>
                         <div class="col-6"></div>
                     </div>
 
-                    <div class="row g-4">
+                    <div class="row g-4 mt-2">
                         <div class="col-lg-3"></div>
 
                         <div class="col-lg-9">
@@ -739,7 +969,7 @@ include 'connection.php';
                                     <div class="p-3 border border-secondary border-top-0 rounded-bottom d-flex flex-column justify-content-between flex-grow-1">
                                         <div>
                                             <h6 class="fw-semibold mb-2">' . $productName . '</h6>
-                                            <div class="product-description text-muted mb-3">
+                                            <div class="product-description text-muted mb-3" style="font-size: 0.8rem; line-height: 1.4;">
                                                 ' . $shortdes . '
                                             </div>
                                             <div class="rating-stars mb-2">
@@ -853,7 +1083,7 @@ include 'connection.php';
                 <i class="fa fa-eye"></i> View Cart
             </button>
             <button class="btn-clear-cart" onclick="clearCart()">
-                <i class="fa fa-trash"></i> Clear All
+                <i class="fa fa-trash"></i> Clear
             </button>
         </div>
     </div>
@@ -864,13 +1094,13 @@ include 'connection.php';
                 <div class="row g-4">
                     <div class="col-lg-3">
                         <a href="#">
-                            <h1 class="text-primary mb-0">Fruitables</h1>
-                            <p class="text-secondary mb-0">Fresh products</p>
+                            <h1 class="text-primary mb-0">DealDost</h1>
+                            <p class="text-secondary mb-0">Your Shopping Partner</p>
                         </a>
                     </div>
                     <div class="col-lg-6">
                         <div class="position-relative mx-auto">
-                            <input class="form-control border-0 w-100 py-3 px-4 rounded-pill" type="number" placeholder="Your Email">
+                            <input class="form-control border-0 w-100 py-3 px-4 rounded-pill" type="email" placeholder="Your Email">
                             <button type="submit" class="btn btn-primary border-0 border-secondary py-3 px-4 position-absolute rounded-pill text-white" style="top: 0; right: 0;">Subscribe Now</button>
                         </div>
                     </div>
@@ -887,8 +1117,8 @@ include 'connection.php';
             <div class="row g-5">
                 <div class="col-lg-3 col-md-6">
                     <div class="footer-item">
-                        <h4 class="text-light mb-3">Why People Like us!</h4>
-                        <p class="mb-4">typesetting, remaining essentially unchanged. It was popularised in the 1960s with the like Aldus PageMaker including of Lorem Ipsum.</p>
+                        <h4 class="text-light mb-3">Why DealDost?</h4>
+                        <p class="mb-4">Your trusted shopping partner offering the best deals on quality products. Shop with confidence at DealDost!</p>
                         <a href="" class="btn border-secondary py-2 px-4 rounded-pill text-primary">Read More</a>
                     </div>
                 </div>
@@ -907,19 +1137,19 @@ include 'connection.php';
                     <div class="d-flex flex-column text-start footer-item">
                         <h4 class="text-light mb-3">Account</h4>
                         <a class="btn-link" href="">My Account</a>
-                        <a class="btn-link" href="">Shop details</a>
+                        <a class="btn-link" href="">Shop Details</a>
                         <a class="btn-link" href="">Shopping Cart</a>
                         <a class="btn-link" href="">Wishlist</a>
                         <a class="btn-link" href="">Order History</a>
-                        <a class="btn-link" href="">International Orders</a>
+                        <a class="btn-link" href="">Track Order</a>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="footer-item">
                         <h4 class="text-light mb-3">Contact</h4>
-                        <p>Address: 1429 Netus Rd, NY 48247</p>
-                        <p>Email: Example@gmail.com</p>
-                        <p>Phone: +0123 4567 8910</p>
+                        <p>Address: Lahore, Punjab, Pakistan</p>
+                        <p>Email: info@dealdost.com</p>
+                        <p>Phone: +92 300 1234567</p>
                         <p>Payment Accepted</p>
                         <img src="img/payment.png" class="img-fluid" alt="">
                     </div>
@@ -932,10 +1162,10 @@ include 'connection.php';
         <div class="container">
             <div class="row">
                 <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                    <span class="text-light"><a href="#"><i class="fas fa-copyright text-light me-2"></i>Your Site Name</a>, All right reserved.</span>
+                    <span class="text-light"><a href="#"><i class="fas fa-copyright text-light me-2"></i>DealDost</a>, All rights reserved.</span>
                 </div>
                 <div class="col-md-6 my-auto text-center text-md-end text-white">
-                    Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a> Distributed By <a class="border-bottom" href="https://themewagon.com">ThemeWagon</a>
+                    Designed with ❤️ for Pakistan
                 </div>
             </div>
         </div>
@@ -944,7 +1174,7 @@ include 'connection.php';
     <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/easing/easing.min.js"></script>
     <script src="lib/waypoints/waypoints.min.js"></script>
     <script src="lib/lightbox/js/lightbox.min.js"></script>
@@ -952,7 +1182,7 @@ include 'connection.php';
     <script src="js/main.js"></script>
 
     <script>
-        let cartItems = [];
+        let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
 
         function showToast(title, message, type = 'success') {
             const toastContainer = document.getElementById('toastContainer');
@@ -982,26 +1212,32 @@ include 'connection.php';
 
             setTimeout(() => {
                 removeToast(toast.querySelector('.toast-close'));
-            }, 4000);
+            }, 3500);
         }
 
         function removeToast(button) {
             const toast = button.closest('.toast');
-            toast.classList.add('hiding');
-            setTimeout(() => {
-                toast.remove();
-            }, 300);
+            if (toast) {
+                toast.classList.add('hiding');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }
         }
 
         function showCartPopup() {
             const popup = document.getElementById('cartPopup');
+            const overlay = document.getElementById('cartOverlay');
             popup.classList.add('show');
+            overlay.classList.add('show');
             updateCartDisplay();
         }
 
         function closeCartPopup() {
             const popup = document.getElementById('cartPopup');
+            const overlay = document.getElementById('cartOverlay');
             popup.classList.remove('show');
+            overlay.classList.remove('show');
         }
 
         function updateCartDisplay() {
@@ -1034,21 +1270,21 @@ include 'connection.php';
 
                 return `
                     <div class="cart-item">
-                        <img src="${imagePath}" alt="${item.name}" class="cart-item-img" onerror="this.src='https://via.placeholder.com/75x75?text=No+Image'">
+                        <img src="${imagePath}" alt="${item.name}" class="cart-item-img" onerror="this.src='https://via.placeholder.com/55x55?text=No+Image'">
                         <div class="cart-item-details">
                             <div class="cart-item-name" title="${item.name}">${item.name}</div>
                             <div class="cart-item-price">Rs ${itemTotal.toFixed(2)}</div>
                             <div class="quantity-controls">
-                                <button class="quantity-btn" onclick="event.stopPropagation(); decreaseQuantity(${index});" title="Decrease quantity">
+                                <button class="quantity-btn" onclick="event.stopPropagation(); decreaseQuantity(${index});" title="Decrease">
                                     −
                                 </button>
                                 <span class="quantity-display" id="qty-${index}">${item.quantity}</span>
-                                <button class="quantity-btn" onclick="event.stopPropagation(); increaseQuantity(${index});" title="Increase quantity">
+                                <button class="quantity-btn" onclick="event.stopPropagation(); increaseQuantity(${index});" title="Increase">
                                     +
                                 </button>
                             </div>
                         </div>
-                        <button class="cart-item-remove" onclick="event.stopPropagation(); removeFromCart(${index});" title="Remove item">
+                        <button class="cart-item-remove" onclick="event.stopPropagation(); removeFromCart(${index});" title="Remove">
                             &times;
                         </button>
                     </div>
@@ -1064,7 +1300,7 @@ include 'connection.php';
 
             if (existingIndex > -1) {
                 cartItems[existingIndex].quantity++;
-                showToast('Updated!', `${name} quantity increased to ${cartItems[existingIndex].quantity}`, 'success');
+                showToast('Updated!', `${name} quantity increased`, 'success');
             } else {
                 const item = {
                     id: productId,
@@ -1074,9 +1310,10 @@ include 'connection.php';
                     quantity: 1
                 };
                 cartItems.push(item);
-                showToast('Added to Cart!', `${name} has been added to your cart`, 'success');
+                showToast('Added to Cart!', `${name} added successfully`, 'success');
             }
 
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
             showCartPopup();
         }
 
@@ -1098,6 +1335,7 @@ include 'connection.php';
                 }, 300);
             }
 
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
             updateSubtotalAndBadge();
         }
 
@@ -1120,6 +1358,7 @@ include 'connection.php';
                     }, 300);
                 }
 
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
                 updateSubtotalAndBadge();
             } else {
                 removeFromCart(index);
@@ -1140,16 +1379,18 @@ include 'connection.php';
         function removeFromCart(index) {
             const itemName = cartItems[index].name;
             cartItems.splice(index, 1);
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
             updateCartDisplay();
-            showToast('Item Removed', `${itemName} has been removed from your cart`, 'info');
+            showToast('Item Removed', `${itemName} removed from cart`, 'info');
         }
 
         function clearCart() {
-            if (confirm('Are you sure you want to clear the entire cart?')) {
+            if (confirm('Clear all items from cart?')) {
                 const itemCount = cartItems.length;
                 cartItems = [];
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
                 updateCartDisplay();
-                showToast('Cart Cleared', `${itemCount} item(s) removed from your cart`, 'info');
+                showToast('Cart Cleared', `${itemCount} item(s) removed`, 'info');
             }
         }
 
@@ -1161,7 +1402,7 @@ include 'connection.php';
 
             setTimeout(() => {
                 window.location.href = 'cart.php';
-            }, 800);
+            }, 600);
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -1170,51 +1411,6 @@ include 'connection.php';
 
         document.getElementById('cartPopup')?.addEventListener('click', function(event) {
             event.stopPropagation();
-        });
-
-        document.addEventListener('click', function(event) {
-            const popup = document.getElementById('cartPopup');
-            const target = event.target;
-
-            if (popup && popup.classList.contains('show')) {
-                if (!popup.contains(target) && !target.closest('.btn-add-to-cart')) {
-                    closeCartPopup();
-                }
-            }
-        });
-    </script>
-
-    <script>
-        function loadPage(page) {
-            const container = document.getElementById('products-grid');
-            container.style.opacity = '0.5';
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'load_products.php?page=' + page, true);
-
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    document.getElementById('products-container').innerHTML = xhr.responseText;
-
-                    document.querySelector('.col-lg-9').scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-
-                    const newUrl = window.location.pathname + '?page=' + page;
-                    window.history.pushState({
-                        page: page
-                    }, '', newUrl);
-                }
-            };
-
-            xhr.send();
-        }
-
-        window.addEventListener('popstate', function(event) {
-            if (event.state && event.state.page) {
-                loadPage(event.state.page);
-            }
         });
     </script>
 </body>
